@@ -1,1 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+
+@import "apps/beats/src/assets/scss/colors";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: $clr-black-1;
+}
+

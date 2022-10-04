@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {Beat, Channel} from "../../../../../apps/beats/src/app/interface/channel.interface";
+import {Beat, Channel} from "@beats/api-interfaces";
 import {channelsMock} from "./editor-data.mock";
-import {PlayerService} from "../../../../../apps/beats/src/app/player/player.service";
-import {BpmService} from "../../../../../apps/beats/src/app/bpm/bpm.service";
+import {PlayerService} from "@beats/beats-player";
+import {BpmService} from "@beats/beats-player";
 import {Subscription} from "rxjs";
 
 @Injectable({

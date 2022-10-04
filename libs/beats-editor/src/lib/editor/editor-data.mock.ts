@@ -1,4 +1,4 @@
-import {Channel, ChannelID} from '../../../../../apps/beats/src/app/interface/channel.interface';
+import {Channel, ChannelID} from '@beats/api-interfaces';
 
 export function generateChannelId(): ChannelID {
   return Math.round(Math.random() * 1000000000);

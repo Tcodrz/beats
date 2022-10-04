@@ -1,6 +1,4 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Message } from '@beats/api-interfaces';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'beats-root',
@@ -8,6 +6,4 @@ import { Message } from '@beats/api-interfaces';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  hello$ = this.http.get<Message>('/api/hello');
-  constructor(private http: HttpClient) {}
 }

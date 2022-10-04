@@ -1,0 +1,11 @@
+@import "../../../../../apps/beats/src/assets/scss/colors";
+@import "../../../../../apps/beats/src/assets/scss/constants";
+
+:host {
+  display: block;
+  width: 500px;
+  height: 100px;
+  background-color: $clr-grey-1;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+}

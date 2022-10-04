@@ -1,0 +1,65 @@
+@import "../../../../../apps/beats/src/assets/scss/colors";
+@import "../../../../../apps/beats/src/assets/scss/constants";
+
+:host {
+  .channel-wrapper {
+    display: flex;
+    margin-top: 8px;
+    min-height: 40px;
+    align-items: center;
+    border: 1px solid $clr-grey-2;
+    border-radius: $border-radius;
+    justify-content: space-between;
+    padding: 0 16px 0 0;
+
+    .audio{
+      display: none;
+    }
+
+    .channel-name {
+      background-color: $clr-white-1;
+      border: 1px solid $clr-grey-2;
+      border-radius: $border-radius;
+      display: flex;
+      width: 350px;
+      //flex: 1;
+      column-gap: 16px;
+      align-items: center;
+      place-content: center start;
+      min-height: inherit;
+      padding: 0 8px;
+    }
+
+    .channel-beats {
+      display: flex;
+      justify-content: space-evenly;
+      max-width: 70%;
+      padding: 4px 0;
+      flex: 2;
+
+      .beat-group {
+        display: flex;
+        margin-left: 12px;
+
+        .beat {
+          width: 16px;
+          height: 32px;
+          border: 1px solid $clr-grey-2;
+          border-radius: $border-radius;
+          margin-left: 8px;
+        }
+
+        .beat-on {
+          background-color: #ffbb3d;
+          box-shadow: 0 0 16px #ffd600;
+        }
+
+        .beat-off {
+          background-color: $clr-white-1;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
+}

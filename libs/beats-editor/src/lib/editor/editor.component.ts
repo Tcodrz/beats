@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {EditorService} from "./editor.service";
-import {Channel} from "../../../../../apps/beats/src/app/interface/channel.interface";
+import {Channel} from "@beats/api-interfaces"
 
 @Component({
   selector: 'beats-editor',

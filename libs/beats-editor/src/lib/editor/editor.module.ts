@@ -2,8 +2,8 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {EditorComponent} from './editor.component';
 import {RouterModule, Routes} from "@angular/router";
-import {ChannelModule} from "../../../../../apps/beats/src/app/channel/channel.module";
-import {PlayerModule} from "../../../../../apps/beats/src/app/bpm/player/player.module";
+import {ChannelModule} from "../channel/channel.module";
+import {PlayerModule} from "@beats/beats-player";
 
 const routes: Routes = [
   {path: '', component: EditorComponent}

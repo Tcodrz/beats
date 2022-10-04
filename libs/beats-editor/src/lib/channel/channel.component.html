@@ -1,0 +1,28 @@
+<div class="channel-wrapper">
+  <div class="channel-name">
+    <button (click)="onLoadSample()">...</button>
+    <button (click)="onMute()">m</button>
+    <button (click)="onSolo()">s</button>
+    <input type="range" min="0" max="100" #volume (input)="onVolumeChange($event)">
+    <div>
+      {{ channel.name }}
+    </div>
+  </div>
+
+  <div class="audio">
+    <input type="file" accept="audio/*" (input)="onUploadFile($event)" #fileInput>
+    <audio #audio></audio>
+  </div>
+
+  <div class="channel-beats">
+
+    <div *ngFor="let beatGroup of channel.beats; let i = index"
+         class="beat-group">
+      <div class="beat" *ngFor="let beat of beatGroup"
+           [ngClass]="beat.on ? 'beat-on' : 'beat-off'"
+           (click)="onBeatClicked(beat)">
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+<div class="player">
+  <button (click)="onClickPlay()">{{ isPlaying ? 'Stop' : 'Play' }}</button>
+
+  <input type="number" [value]="bpm" (input)="onBpmChanged($event)">
+
+</div>
