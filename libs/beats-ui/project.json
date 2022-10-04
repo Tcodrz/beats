@@ -1,0 +1,23 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/beats-ui/src",
+  "prefix": "beats",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/beats-ui"],
+      "options": {
+        "jestConfig": "libs/beats-ui/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/beats-ui/**/*.ts", "libs/beats-ui/**/*.html"]
+      }
+    }
+  },
+  "tags": []
+}

@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@beats/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@beats/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@beats/beats-ui": ["libs/beats-ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
