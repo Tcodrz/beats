@@ -6,6 +6,7 @@
     "api-interfaces": "libs/api-interfaces",
     "beats": "apps/beats",
     "beats-e2e": "apps/beats-e2e",
+    "beats-editor": "libs/beats-editor",
     "beats-ui": "libs/beats-ui"
   }
 }
