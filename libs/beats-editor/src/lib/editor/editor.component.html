@@ -1,0 +1,14 @@
+<div class="wrapper">
+
+<div class="channels">
+
+  <beats-channel *ngFor="let channel of channels"
+                 [channel]="channel"
+  ></beats-channel>
+</div>
+
+  <div class="player">
+    <beats-player></beats-player>
+  </div>
+</div>
+

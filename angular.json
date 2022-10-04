@@ -7,6 +7,7 @@
     "beats": "apps/beats",
     "beats-e2e": "apps/beats-e2e",
     "beats-editor": "libs/beats-editor",
+    "beats-player": "libs/beats-player",
     "beats-ui": "libs/beats-ui"
   }
 }

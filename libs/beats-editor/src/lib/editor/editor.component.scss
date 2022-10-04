@@ -1,0 +1,28 @@
+@import "../../../../../apps/beats/src/assets/scss/colors";
+@import "../../../../../apps/beats/src/assets/scss/constants";
+
+:host {
+  display: block;
+  background-color: $clr-grey-1;
+  box-shadow: $box-shadow;
+  border-radius: $border-radius;
+  width: 65vw;
+  height: 68vh;
+
+  @media only screen and (max-width: 768px) {
+    width: 95vw;
+    height: 68vh;
+  }
+
+  .wrapper {
+    padding: 8px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    .player {
+      margin: 0 auto;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "strict": false,
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
@@ -17,6 +18,7 @@
     "paths": {
       "@beats/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@beats/beats-editor": ["libs/beats-editor/src/index.ts"],
+      "@beats/beats-player": ["libs/beats-player/src/index.ts"],
       "@beats/beats-ui": ["libs/beats-ui/src/index.ts"]
     }
   },
