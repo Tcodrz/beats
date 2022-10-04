@@ -6,7 +6,9 @@
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/beats-ui"],
+      "outputs": [
+        "coverage/libs/beats-ui"
+      ],
       "options": {
         "jestConfig": "libs/beats-ui/jest.config.ts",
         "passWithNoTests": true
@@ -15,7 +17,10 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/beats-ui/**/*.ts", "libs/beats-ui/**/*.html"]
+        "lintFilePatterns": [
+          "libs/beats-ui/**/*.ts",
+          "libs/beats-ui/**/*.html"
+        ]
       }
     }
   },

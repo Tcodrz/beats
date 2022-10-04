@@ -11,7 +11,12 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [EditorComponent],
-  imports: [CommonModule, RouterModule.forChild(routes), ChannelModule, PlayerModule],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    ChannelModule,
+    PlayerModule
+  ],
 })
 export class EditorModule {
 }

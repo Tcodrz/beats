@@ -6,7 +6,9 @@
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/beats-player"],
+      "outputs": [
+        "coverage/libs/beats-player"
+      ],
       "options": {
         "jestConfig": "libs/beats-player/jest.config.ts",
         "passWithNoTests": true
