@@ -1,0 +1,11 @@
+@import "apps/beats/src/assets/scss/colors.scss";
+
+button {
+  min-width: 30px;
+  line-height: 30px;
+  padding: 0;
+
+  &[mat-button] {
+    border: 1px solid $clr-grey-2;
+  }
+}
