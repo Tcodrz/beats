@@ -21,17 +21,17 @@ export class ChannelComponent implements AfterViewInit {
   public onBeatClicked(beat: Beat): void {
     beat.on = !beat.on;
     if (beat.on && this.previewElement.nativeElement.src) {
-      this.previewElement.nativeElement.play();
+      this.previewElement.nativeElement.play().then();
     }
   }
 
   public onUploadFile(event): void {
     const files: FileList = event.target.files;
     const file = files.item(0);
-    const readableData = URL.createObjectURL(file);
+    const fileURL = URL.createObjectURL(file);
     this.channel.name = file.name;
-    this.previewElement.nativeElement.src = readableData;
-    this.channel.audioData = readableData;
+    this.previewElement.nativeElement.src = fileURL;
+    this.channel.fileURL = fileURL;
     this.previewElement.nativeElement.volume = (+this.previewVolume.nativeElement.value / 100);
     this.previewElement.nativeElement.play().then();
   }

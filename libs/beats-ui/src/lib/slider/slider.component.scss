@@ -1,0 +1,19 @@
+@import "apps/beats/src/assets/scss/constants";
+@import "apps/beats/src/assets/scss/colors";
+
+:host {
+  .slider {
+    border-radius: $border-radius;
+    display: flex;
+    align-items: center;
+
+    beats-ui-icon {
+      height: 24px;
+      margin: 0 8px;
+    }
+
+    .value {
+      font-weight: bold;
+    }
+  }
+}

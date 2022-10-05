@@ -4,22 +4,24 @@ import {BehaviorSubject, interval, Observable, Subscription} from "rxjs";
 const SECONDS_IN_MINUTE = 60;
 const BEATS_IN_BAR = 4;
 const MILLISECONDS_IN_MINUTE = SECONDS_IN_MINUTE * 1000;
+export const INITIAL_COUNTER = 1;
 
 @Injectable({
   providedIn: 'root'
 })
 export class BpmService {
 
-  private bpm$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  private bpm$: BehaviorSubject<number> = new BehaviorSubject<number>(INITIAL_COUNTER);
   private _interval: number;
   private intervalSubscription: Subscription;
-  private _counter = 1;
+  private _counter = INITIAL_COUNTER;
 
   get interval(): number {
     return this._interval;
   }
 
   public setBpm(beats: number): void {
+    this.reset();
     this._interval = 1000 / (beats / SECONDS_IN_MINUTE);
   }
 

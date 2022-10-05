@@ -16,7 +16,7 @@
 
   <div class="channel-beats">
 
-    <div *ngFor="let beatGroup of channel.beats; let i = index"
+    <div *ngFor="let beatGroup of channel.beats"
          class="beat-group">
       <div class="beat" *ngFor="let beat of beatGroup"
            [ngClass]="beat.on ? 'beat-on' : 'beat-off'"

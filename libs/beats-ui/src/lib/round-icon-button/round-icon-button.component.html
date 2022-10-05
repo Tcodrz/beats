@@ -1,0 +1,11 @@
+<ng-container *ngIf="size === buttonSize.small">
+  <button mat-mini-fab [color]="color" (click)="clicked.emit($event)">
+    <beats-ui-icon [icon]="icon"></beats-ui-icon>
+  </button>
+</ng-container>
+
+<ng-container *ngIf="size === buttonSize.big">
+  <button mat-fab [color]="color" (click)="clicked.emit($event)">
+    <beats-ui-icon [icon]="icon"></beats-ui-icon>
+  </button>
+</ng-container>

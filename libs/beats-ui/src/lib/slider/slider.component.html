@@ -1,0 +1,18 @@
+<div class="slider">
+  <span class="value">
+    <ng-content select="[left]"></ng-content>
+  </span>
+
+  <ng-container *ngIf="showSlider">
+    <mat-slider [min]="min" [max]="max" [step]="stepSize" color="primary" [value]="value" (change)="onSliderChange($event)"></mat-slider>
+  </ng-container>
+
+  <ng-container *ngIf="showAddSubIcons">
+    <beats-ui-icon [icon]="icons.minus" color="primary" (click)="onSubtract()"></beats-ui-icon>
+    <span class="value">
+      <ng-content select="[center]"></ng-content>
+    </span>
+    <beats-ui-icon [icon]="icons.plus" color="primary" (click)="onAdd()"></beats-ui-icon>
+  </ng-container>
+
+</div>

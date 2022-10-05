@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PlayerService} from "./player.service";
 import {BpmService} from "./bpm.service";
+import {ButtonSize, ButtonType, Icons, SliderConfig} from "@beats/beats-ui";
 
 export const DEFAULT_BPM = 120;
 
@@ -13,6 +14,10 @@ export class PlayerComponent implements OnInit {
 
   bpm = DEFAULT_BPM;
   isPlaying: boolean;
+  icons = Icons;
+  bpmSliderConfig: SliderConfig;
+  buttonType = ButtonType;
+  buttonSize = ButtonSize;
 
   constructor(
     private playerService: PlayerService,
@@ -21,6 +26,14 @@ export class PlayerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.bpmSliderConfig = {
+      min: 50,
+      max: 100,
+      stepSize: 0.5,
+      value: this.bpm / 2,
+      showAddSubIcons: true,
+      showSlider: false
+    }
     this.bpmService.setBpm(this.bpm);
   }
 
@@ -34,9 +47,8 @@ export class PlayerComponent implements OnInit {
     }
   }
 
-
-  public onBpmChanged(event: Event): void {
-    this.bpm = Number(event.target['value']);
+  public onBpmChanged(event: number): void {
+    this.bpm = event * 2;
     this.isPlaying = false;
     this.bpmService.setBpm(this.bpm);
   }

@@ -8,4 +8,12 @@
   background-color: $clr-grey-1;
   border-radius: $border-radius;
   box-shadow: $box-shadow;
+
+  .player {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 8px;
+  }
 }

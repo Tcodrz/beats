@@ -2,7 +2,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/beats-ui/src",
-  "prefix": "beats",
+  "prefix": "beats-ui",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",

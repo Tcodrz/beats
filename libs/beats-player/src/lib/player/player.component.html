@@ -1,6 +1,18 @@
 <div class="player">
-  <button (click)="onClickPlay()">{{ isPlaying ? 'Stop' : 'Play' }}</button>
+  <div>
+    <beats-ui-round-icon-button [color]="isPlaying ? 'primary' : 'accent'"
+                                [type]="buttonType.roundIconButton"
+                                [size]="buttonSize.small"
+                                [icon]="isPlaying ? icons.pause : icons.play"
+                                (click)="onClickPlay()"
+    ></beats-ui-round-icon-button>
+  </div>
 
-  <input type="number" [value]="bpm" (input)="onBpmChanged($event)">
+  <div>
+    <beats-ui-slider [sliderConfig]="bpmSliderConfig"
+                     (sliderChange)="onBpmChanged($event)">
+      <ng-container center>{{this.bpm}}</ng-container>
+    </beats-ui-slider>
+  </div>
 
 </div>

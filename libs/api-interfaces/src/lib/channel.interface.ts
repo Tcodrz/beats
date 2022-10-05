@@ -4,7 +4,7 @@ export interface Channel {
   id: ChannelID;
   name: string;
   beats: [Bar, Bar, Bar, Bar];
-  audioData?: string;
+  fileURL?: string;
   volume: number;
   mute?: boolean;
   solo?: boolean;

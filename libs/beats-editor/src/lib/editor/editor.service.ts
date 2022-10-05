@@ -3,7 +3,7 @@ import {Beat, Channel} from "@beats/api-interfaces";
 import {channelsMock} from "./editor-data.mock";
 import {PlayerService} from "@beats/beats-player";
 import {BpmService} from "@beats/beats-player";
-import {Subscription} from "rxjs";
+import {skip, Subscription} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,7 @@ export class EditorService {
 
   private subscribeToPlayer(): void {
     this.player.isPlaying()
+      .pipe(skip(1))
       .subscribe(isPlaying => {
         if (isPlaying) {
           this.play();
@@ -50,7 +51,7 @@ export class EditorService {
 
           const audioSource = this.channelBeatsAudioMap.get(mapKey);
 
-          if (!audioSource && channel.audioData) {
+          if (!audioSource && channel.fileURL) {
             this.registerChannel(channel, mapKey);
           }
 
@@ -66,7 +67,7 @@ export class EditorService {
 
   private registerChannel(channel: Channel, mapKey: string): void {
     const audioElement = document.createElement('audio');
-    audioElement.src = channel.audioData;
+    audioElement.src = channel.fileURL;
     audioElement.volume = channel.volume;
     const source = this.context.createMediaElementSource(audioElement);
     source.connect(this.masterChannel).connect(this.context.destination);
