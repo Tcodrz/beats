@@ -13,3 +13,4 @@ export * from './lib/toggle-button/toggle-button.module';
 /* MOCKS */
 export * from './lib/mocks/slider.component.mock';
 export * from './lib/mocks/button.component.mock';
+export * from './lib/mocks/toggle-button.component.mock';

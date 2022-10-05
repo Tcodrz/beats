@@ -1,8 +1,8 @@
 <div class="channel-wrapper">
   <div class="channel-name">
     <button (click)="onLoadSample()">...</button>
-    <button (click)="onMute()">m</button>
-    <button (click)="onSolo()">s</button>
+    <beats-ui-toggle-button (click)="onMute()" [text]="'m'"></beats-ui-toggle-button>
+    <beats-ui-toggle-button (click)="onSolo()" [text]="'s'"></beats-ui-toggle-button>
     <input type="range" min="0" max="100" #volume (input)="onVolumeChange($event)">
     <div>
       {{ channel.name }}

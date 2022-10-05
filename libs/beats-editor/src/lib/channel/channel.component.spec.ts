@@ -1,6 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ChannelComponent} from './channel.component';
 import {Bar, Channel} from "@beats/api-interfaces";
+import {ToggleButtonComponentMock} from "@beats/beats-ui";
 
 const beatsMock: [Bar, Bar, Bar, Bar] = [
   [{on: false}, {on: false}, {on: false}, {on: false}],
@@ -26,6 +27,7 @@ describe('ChannelComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ChannelComponent],
+      imports: [ToggleButtonComponentMock]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ChannelComponent);
