@@ -1,0 +1,17 @@
+<ng-container *ngIf="isActive">
+  <button mat-flat-button
+          [color]="'warn'"
+          (click)="onClick()"
+  >
+    {{text}}
+  </button>
+</ng-container>
+
+<ng-container *ngIf="!isActive">
+  <button mat-button
+          [color]="'primary'"
+          (click)="onClick()"
+  >
+    {{text}}
+  </button>
+</ng-container>

@@ -7,6 +7,8 @@ export * from './lib/slider/slider.component';
 export * from './lib/slider/slider.module';
 export * from './lib/slider/slider-config.interface';
 export * from './lib/button/button-types';
+export * from './lib/toggle-button/toggle-button.component';
+export * from './lib/toggle-button/toggle-button.module';
 
 /* MOCKS */
 export * from './lib/mocks/slider.component.mock';

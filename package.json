@@ -4,10 +4,14 @@
   "license": "MIT",
   "scripts": {
     "ng": "nx",
+    "test:all": "nx run-many --target=test --projects=\"beats,beats-ui,beats-player,beats-editor\"",
+    "test:ui": "nx test beats-ui --watchAll --verbose",
+    "test:player": "nx test beats-player --watchAll --verbose",
+    "test:editor": "nx test beats-editor --watchAll --verbose",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2020 browser module main",
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test beats --watchAll --verbose"
   },
   "private": true,
   "dependencies": {
@@ -65,8 +69,5 @@
     "ts-jest": "28.0.5",
     "ts-node": "10.9.1",
     "typescript": "~4.8.2"
-  },
-  "jest": {
-    "verbose": true
   }
 }
