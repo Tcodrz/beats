@@ -1,6 +1,6 @@
 <div class="channel-wrapper">
   <div class="channel-name">
-    <button (click)="onLoadSample()">...</button>
+    <beats-ui-icon-button [icon]="icons.upload" (clicked)="onLoadSample()"></beats-ui-icon-button>
     <beats-ui-toggle-button (click)="onMute()" [text]="'m'"></beats-ui-toggle-button>
     <beats-ui-toggle-button (click)="onSolo()" [text]="'s'"></beats-ui-toggle-button>
     <beats-ui-knob [value]="channel.volume * 100" (valueChange)="onVolumeChange($event)" ></beats-ui-knob>

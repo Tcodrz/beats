@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {Beat, Channel} from "@beats/api-interfaces";
+import {Icons} from "@beats/beats-ui";
 
 @Component({
   selector: 'beats-channel',
@@ -12,6 +13,7 @@ export class ChannelComponent implements AfterViewInit {
   @ViewChild('fileInput', {static: true}) fileInput: ElementRef<HTMLInputElement>;
   private isMuted: boolean;
   private _volume: number;
+  public readonly icons = Icons;
 
   ngAfterViewInit(): void {
     this.setPreviewElementVolume(this.channel.volume);
