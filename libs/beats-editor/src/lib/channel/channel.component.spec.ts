@@ -2,6 +2,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ChannelComponent} from './channel.component';
 import {Bar, Channel} from "@beats/api-interfaces";
 import {ToggleButtonComponentMock} from "@beats/beats-ui";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 
 const beatsMock: [Bar, Bar, Bar, Bar] = [
   [{on: false}, {on: false}, {on: false}, {on: false}],
@@ -19,6 +20,15 @@ const channelMock: Channel = {
   solo: false,
 }
 
+@Component({
+  selector: 'beats-ui-knob',
+  template: '',
+  standalone: true,
+})
+class KnobComponentMock {
+  @Input() value: number;
+  @Output() valueChange = new EventEmitter();
+}
 
 describe('ChannelComponent', () => {
   let component: ChannelComponent;
@@ -27,7 +37,7 @@ describe('ChannelComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ChannelComponent],
-      imports: [ToggleButtonComponentMock]
+      imports: [ToggleButtonComponentMock, KnobComponentMock]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ChannelComponent);
@@ -70,7 +80,6 @@ describe('ChannelComponent', () => {
       fileMock = {
         name: 'file_mock'
       };
-      component.previewVolume.nativeElement.value = volumeMock.toString();
       component.previewElement.nativeElement.play = jest.fn(() => Promise.resolve());
       global.URL.createObjectURL = jest.fn(() => fileURLMock);
       component.onUploadFile({
@@ -113,9 +122,7 @@ describe('ChannelComponent', () => {
 
   describe('onVolumeChange()', () => {
     beforeEach(() => {
-      component.onVolumeChange({
-        target: {value: '70'}
-      } as any);
+      component.onVolumeChange(70);
     });
     it('Should set the channel volume to the value in the event divided by 100', () => {
       expect(component.channel.volume).toEqual(0.7);
@@ -125,9 +132,6 @@ describe('ChannelComponent', () => {
       expect(component.previewElement.nativeElement.volume).toEqual(0.7);
     });
 
-    it('Should set the previewVolume to the value in the event', () => {
-      expect(component.previewVolume.nativeElement.value).toEqual('70');
-    });
   });
 
   describe('onMute()', () => {

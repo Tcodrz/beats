@@ -3,6 +3,7 @@
 
 :host {
   .channel-wrapper {
+    user-select: none;
     display: flex;
     margin-top: 8px;
     min-height: 40px;
@@ -22,7 +23,6 @@
       border-radius: $border-radius;
       display: flex;
       width: 350px;
-      //flex: 1;
       column-gap: 16px;
       align-items: center;
       place-content: center start;

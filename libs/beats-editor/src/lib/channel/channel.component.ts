@@ -10,7 +10,6 @@ export class ChannelComponent implements AfterViewInit {
   @Input() channel: Channel;
   @ViewChild('audio', {static: true}) previewElement: ElementRef<HTMLAudioElement>;
   @ViewChild('fileInput', {static: true}) fileInput: ElementRef<HTMLInputElement>;
-  @ViewChild('volume', { static: true}) previewVolume: ElementRef<HTMLInputElement>;
   private isMuted: boolean;
   private _volume: number;
 
@@ -32,7 +31,6 @@ export class ChannelComponent implements AfterViewInit {
     this.channel.name = file.name;
     this.previewElement.nativeElement.src = fileURL;
     this.channel.fileURL = fileURL;
-    this.previewElement.nativeElement.volume = (+this.previewVolume.nativeElement.value / 100);
     this.previewElement.nativeElement.play().then();
   }
 
@@ -40,10 +38,9 @@ export class ChannelComponent implements AfterViewInit {
     this.fileInput.nativeElement.click();
   }
 
-  public onVolumeChange(event: Event): void {
-    const volume = Number(event.target['value']) / 100;
-    this.channel.volume = volume;
-    this.setPreviewElementVolume(volume);
+  public onVolumeChange(event: number): void {
+    this.channel.volume = event / 100;
+    this.setPreviewElementVolume(this.channel.volume);
   }
 
   private setPreviewElementVolume(volume: number): void {
@@ -51,7 +48,6 @@ export class ChannelComponent implements AfterViewInit {
       this._volume = volume;
     }
     this.previewElement.nativeElement.volume = volume;
-    this.previewVolume.nativeElement.value = (volume * 100).toString();
   }
 
   public onMute(): void {
