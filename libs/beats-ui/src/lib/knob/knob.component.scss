@@ -1,0 +1,39 @@
+@import "apps/beats/src/assets/scss/colors";
+@import "apps/beats/src/assets/scss/constants";
+
+$knob-width: 28px;
+$knob-height: 28px;
+$knob-border-radius: 50%;
+$knob-color-light: #525252;
+$knob-color-dark: #373737;
+$knob-indicator-color: #ffffff;
+$knob-indicator-margin: 18px;
+$knob-indicator-width: 4px;
+$knob-indicator-height: 10px;
+
+.knob {
+  background: linear-gradient(0deg, $knob-color-light 0%, $knob-color-dark 100%);
+  width: $knob-width;
+  height: $knob-height;
+  border-radius: $knob-border-radius;
+  position: relative;
+}
+
+.indicator {
+  width: $knob-width;
+  height: $knob-height;
+  position: relative;
+  border-radius: $knob-border-radius;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: $knob-indicator-margin;
+    left: 48%;
+    transform: translateX(-50%);
+    width: $knob-indicator-width;
+    height: $knob-indicator-height;
+    background-color: $knob-indicator-color;
+    box-shadow: 0 0 10px #349beb;
+  }
+}
