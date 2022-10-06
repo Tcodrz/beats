@@ -11,6 +11,8 @@ export * from './lib/toggle-button/toggle-button.component';
 export * from './lib/toggle-button/toggle-button.module';
 export * from './lib/knob/knob.component';
 export * from './lib/knob/knob.module';
+export * from './lib/icon-button/icon-button.module';
+export * from './lib/icon-button/icon-button.component';
 
 /* MOCKS */
 export * from './lib/mocks/slider.component.mock';
