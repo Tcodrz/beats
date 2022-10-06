@@ -22,13 +22,13 @@ describe('KnobComponent', () => {
 
   it('Should set the knob default position when no input value provided', () => {
     const value = DEFAULT_VALUE * TO_DEG_MULTIPLIER;
-    const knobComponent = fixture.debugElement.query(By.css('.knob'));
+    const knobComponent = fixture.debugElement.query(By.css('.indicator'));
     expect(knobComponent.nativeElement.style.transform).toEqual(`rotate(${value}deg)`);
   });
 
   it('Should set the knob position to be the input value provided times the conversion rate to degrees', () => {
     component.setValue = 10;
-    const knobElement = fixture.debugElement.query(By.css('.knob'));
+    const knobElement = fixture.debugElement.query(By.css('.indicator'));
     expect(knobElement.nativeElement.style.transform).toEqual(`rotate(${36}deg)`);
   });
 });
