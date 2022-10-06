@@ -1,0 +1,45 @@
+<ng-container [ngSwitch]="type">
+
+  <ng-container *ngSwitchCase="buttonTypes.basic">
+    <button mat-button
+            [color]="color"
+            (click)="clicked.emit($event)">
+      <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+    </button>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="buttonTypes.flat">
+    <button mat-flat-button
+            [color]="color"
+            (click)="clicked.emit($event)">
+      <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+    </button>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="buttonTypes.raised">
+    <button mat-raised-button
+            [color]="color"
+            (click)="clicked.emit($event)">
+      <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+    </button>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="buttonTypes.stroked">
+    <button mat-stroked-button (click)="clicked.emit($event)">
+      <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+    </button>
+  </ng-container>
+
+</ng-container>
+
+<ng-template #buttonContent>
+  <div class="button-content">
+
+    <div *ngIf="text" class="text">{{text}}</div>
+
+    <mat-icon *ngIf="icon" class="icon">{{ icon }}</mat-icon>
+
+    <ng-content select="[content]"></ng-content>
+
+  </div>
+</ng-template>

@@ -13,6 +13,8 @@ export * from './lib/knob/knob.component';
 export * from './lib/knob/knob.module';
 export * from './lib/icon-button/icon-button.module';
 export * from './lib/icon-button/icon-button.component';
+export * from './lib/button/button.component';
+export * from './lib/button/button.module';
 
 /* MOCKS */
 export * from './lib/mocks/slider.component.mock';

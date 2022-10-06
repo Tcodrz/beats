@@ -4,5 +4,9 @@
   button[mat-icon-button] {
     width: 16px;
     color: $clr-grey-2;
+
+    &:hover {
+      color: $clr-black-1;
+    }
   }
 }

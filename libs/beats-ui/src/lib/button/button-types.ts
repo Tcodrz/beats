@@ -4,8 +4,10 @@ export enum ButtonSize {
 }
 
 export enum ButtonType {
-  roundIconButton,
-  toggleButton
+  basic = 'basic',
+  flat = 'flat',
+  raised = 'raised',
+  stroked = 'stroked',
 }
 
 export type ButtonColor = 'primary' | 'accent' | 'warn';
