@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {Beat, Channel} from "@beats/api-interfaces";
 import {Icons} from "@beats/beats-ui";
 
@@ -9,6 +9,7 @@ import {Icons} from "@beats/beats-ui";
 })
 export class ChannelComponent implements AfterViewInit {
   @Input() channel: Channel;
+  @Output() deleteChannel = new EventEmitter<Channel>();
   @ViewChild('audio', {static: true}) previewElement: ElementRef<HTMLAudioElement>;
   @ViewChild('fileInput', {static: true}) fileInput: ElementRef<HTMLInputElement>;
   private isMuted: boolean;
@@ -60,5 +61,9 @@ export class ChannelComponent implements AfterViewInit {
 
   public onSolo(): void {
     this.channel.solo = !this.channel.solo;
+  }
+
+  onDeleteChannel(): void {
+    this.deleteChannel.emit(this.channel);
   }
 }

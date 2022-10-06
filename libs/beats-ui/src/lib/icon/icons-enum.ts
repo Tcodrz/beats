@@ -4,4 +4,5 @@ export enum Icons {
   plus = 'add',
   minus = 'remove',
   upload = 'file_upload',
+  trash = 'delete'
 }

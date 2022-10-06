@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {EditorService} from "./editor.service";
 import {Channel} from "@beats/api-interfaces"
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'beats-editor',
@@ -8,13 +9,17 @@ import {Channel} from "@beats/api-interfaces"
   styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit {
-  channels: Channel[];
+  channels$: Observable<Channel[]>;
   constructor(
     private editorService: EditorService,
   ) {
   }
 
   ngOnInit(): void {
-    this.channels = this.editorService.getChannels();
+    this.channels$ = this.editorService.getChannels();
+  }
+
+  public onDeleteChannel(channel: Channel): void {
+    this.editorService.deleteChannel(channel);
   }
 }

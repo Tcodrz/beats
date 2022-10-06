@@ -3,12 +3,14 @@ import {Beat, Channel} from "@beats/api-interfaces";
 import {channelsMock} from "./editor-data.mock";
 import {PlayerService} from "@beats/beats-player";
 import {BpmService} from "@beats/beats-player";
-import {skip, Subscription} from "rxjs";
+import {BehaviorSubject, Observable, of, skip, Subscription} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EditorService {
+
+  private channels$: BehaviorSubject<Channel[]> = new BehaviorSubject<Channel[]>(channelsMock);
 
   private context: AudioContext;
   private masterChannel: GainNode;
@@ -34,8 +36,8 @@ export class EditorService {
       });
   }
 
-  public getChannels(): Channel[] {
-    return channelsMock;
+  public getChannels(): Observable<Channel[]> {
+    return this.channels$.asObservable();
   }
 
   private play(): void {
@@ -101,5 +103,10 @@ export class EditorService {
     const nextBeat = this.getNextBeatIndex(currentBeat);
     const beats = channel.beats.reduce((arr, beats) => arr.concat(beats), []);
     return beats[nextBeat];
+  }
+
+  public deleteChannel(channel: Channel): void {
+    const channels = this.channels$.getValue().filter(c => c.id !== channel.id);
+    this.channels$.next(channels);
   }
 }

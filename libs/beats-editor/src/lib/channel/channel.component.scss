@@ -2,9 +2,18 @@
 @import "../../../../../apps/beats/src/assets/scss/constants";
 
 :host {
+  display: flex;
+  align-items: center;
+  column-gap: 16px;
+
+  .delete-channel {
+    padding-top: 8px;
+  }
+
   .channel-wrapper {
     user-select: none;
     display: flex;
+    flex: 1;
     margin-top: 8px;
     min-height: 40px;
     align-items: center;

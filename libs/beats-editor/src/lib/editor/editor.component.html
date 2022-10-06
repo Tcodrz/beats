@@ -2,8 +2,9 @@
 
 <div class="channels">
 
-  <beats-channel *ngFor="let channel of channels"
+  <beats-channel *ngFor="let channel of channels$ | async"
                  [channel]="channel"
+                 (deleteChannel)="onDeleteChannel($event)"
   ></beats-channel>
 </div>
 

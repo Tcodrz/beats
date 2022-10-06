@@ -1,5 +1,8 @@
+@import "apps/beats/src/assets/scss/colors";
+
 :host {
   button[mat-icon-button] {
     width: 16px;
+    color: $clr-grey-2;
   }
 }
