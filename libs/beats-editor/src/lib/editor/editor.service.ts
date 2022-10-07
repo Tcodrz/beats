@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Beat, Channel} from "@beats/api-interfaces";
 import {channelsMock} from "./editor-data.mock";
-import {PlayerService} from "@beats/beats-player";
-import {BpmService} from "@beats/beats-player";
-import {BehaviorSubject, Observable, of, skip, Subscription} from "rxjs";
+import {BpmService, PlayerService} from "@beats/beats-player";
+import {BehaviorSubject, Observable, skip, Subscription} from "rxjs";
+import {EditorApiService} from "./editor-api.service";
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,7 @@ export class EditorService {
   constructor(
     private player: PlayerService,
     private bpm: BpmService,
+    private editorApiService: EditorApiService
   ) {
     this.subscribeToPlayer();
   }
@@ -37,35 +38,43 @@ export class EditorService {
   }
 
   public getChannels(): Observable<Channel[]> {
+    this.editorApiService.getChannels().subscribe(channels => {
+      this.channels$.next(channels);
+    });
     return this.channels$.asObservable();
+  }
+
+  public getChannelsValue(): Channel[] {
+    return this.channels$.getValue();
   }
 
   private play(): void {
     this.initContext();
     this.playSubscription = this.bpm.getBpm()
       .subscribe(currentBeat => {
-        const hasSoloChannels = channelsMock.some(c => c.solo);
-        const channels = hasSoloChannels ? channelsMock.filter(c => c.solo) : channelsMock;
+        const hasSoloChannels = this.channels$.getValue().some(c => c.solo);
+        const channels = hasSoloChannels ? this.channels$.getValue().filter(c => c.solo) : this.channels$.getValue();
+
         channels
+          .filter(c => !c.mute)
           .forEach(channel => {
-          const beat = this.getNextBeat(channel, currentBeat);
-          const mapKey = `${channel.id}:${currentBeat}`;
+            const beat = this.getNextBeat(channel, currentBeat);
+            const mapKey = `${channel.id}:${currentBeat}`;
 
-          const audioSource = this.channelBeatsAudioMap.get(mapKey);
+            const audioSource = this.channelBeatsAudioMap.get(mapKey);
 
-          if (!audioSource && channel.fileURL) {
-            this.registerChannel(channel, mapKey);
-          }
+            if (!audioSource && channel.fileURL) {
+              this.registerChannel(channel, mapKey);
+            }
 
-          if (beat.on && this.channelBeatsAudioMap.get(mapKey)) {
-            this.channelBeatsAudioMap.get(mapKey).mediaElement.volume = channel.volume;
-            this.channelBeatsAudioMap.get(mapKey).mediaElement.play().then();
-          }
+            if (beat.on && this.channelBeatsAudioMap.get(mapKey)) {
+              this.channelBeatsAudioMap.get(mapKey).mediaElement.volume = channel.volume;
+              this.channelBeatsAudioMap.get(mapKey).mediaElement.play().then();
+            }
 
-        });
+          });
       });
   }
-
 
   private registerChannel(channel: Channel, mapKey: string): void {
     const audioElement = document.createElement('audio');
@@ -106,7 +115,60 @@ export class EditorService {
   }
 
   public deleteChannel(channel: Channel): void {
-    const channels = this.channels$.getValue().filter(c => c.id !== channel.id);
+    this.editorApiService.deleteChannel(channel).subscribe(channels => {
+      this.channels$.next(channels);
+    });
+  }
+
+  public createNewChannel(): void {
+    const newChannel: Channel = {
+      id: Math.round(Math.random() * 10000000),
+      name: 'New Channel',
+      beats: [
+        [{on: false}, {on: false}, {on: false}, {on: false}],
+        [{on: false}, {on: false}, {on: false}, {on: false}],
+        [{on: false}, {on: false}, {on: false}, {on: false}],
+        [{on: false}, {on: false}, {on: false}, {on: false}]
+      ],
+      volume: 0.7,
+      mute: false,
+      solo: false
+    };
+    this.editorApiService.addChannel(newChannel)
+      .subscribe((channels) => {
+        this.channels$.next(channels);
+      });
+  }
+
+  public toggleAllChannelSolo(solo: boolean): void {
+    const channels = this.channels$.getValue();
+    this.channels$.next(channels.map(c => ({...c, solo: solo})));
+  }
+
+  public toggleAllChannelMute(mute: boolean): void {
+    const channels = this.channels$.getValue();
+    this.channels$.next(channels.map(c => ({...c, mute: mute})));
+  }
+
+  public muteChannel(channel: Channel) {
+    channel.mute = !channel.mute;
+    const channels = this.channels$.getValue()
+      .map(c => ({
+        ...c,
+        mute: channel.id === c.id ? channel.mute : c.mute
+      }));
     this.channels$.next(channels);
+    this.editorApiService.updateChannel(channel).subscribe();
+  }
+
+  public soloChannel(channel: Channel): void {
+    channel.solo = !channel.solo;
+    const channels = this.channels$.getValue()
+      .map(c => ({
+        ...c,
+        solo: channel.id === c.id ? channel.solo : c.solo
+      }));
+    this.channels$.next(channels);
+    this.editorApiService.updateChannel(channel).subscribe();
   }
 }

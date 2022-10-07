@@ -4,6 +4,7 @@ import {EditorComponent} from './editor.component';
 import {RouterModule, Routes} from "@angular/router";
 import {ChannelModule} from "../channel/channel.module";
 import {PlayerModule} from "@beats/beats-player";
+import {ButtonModule, ToggleButtonModule} from "@beats/beats-ui";
 
 const routes: Routes = [
   {path: '', component: EditorComponent}
@@ -15,7 +16,9 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     ChannelModule,
-    PlayerModule
+    PlayerModule,
+    ButtonModule,
+    ToggleButtonModule
   ],
 })
 export class EditorModule {

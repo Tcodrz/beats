@@ -1,12 +1,30 @@
 <div class="wrapper">
 
-<div class="channels">
+  <div class="toolbar">
+    <beats-ui-button [type]="buttonTypes.flat"
+                     [icon]="icons.plus"
+                     (clicked)="onAddChannel($event)">
+    </beats-ui-button>
+    <beats-ui-toggle-button [text]="'m'"
+                            [isActive]="isGlobalMuteActive"
+                            (clicked)="toggleGlobalMute()"
+    >
+    </beats-ui-toggle-button>
+    <beats-ui-toggle-button [text]="'s'"
+                            [isActive]="isGlobalSoloActive"
+                            (clicked)="toggleGlobalSolo()">
+    </beats-ui-toggle-button>
+  </div>
 
-  <beats-channel *ngFor="let channel of channels$ | async"
-                 [channel]="channel"
-                 (deleteChannel)="onDeleteChannel($event)"
-  ></beats-channel>
-</div>
+  <div class="channels">
+
+    <beats-channel *ngFor="let channel of channels$ | async"
+                   [channel]="channel"
+                   (deleteChannel)="onDeleteChannel($event)"
+                   (soloChannel)="onChannelSolo($event)"
+                   (muteChannel)="onChannelMute($event)"
+    ></beats-channel>
+  </div>
 
   <div class="player">
     <beats-player></beats-player>

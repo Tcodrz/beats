@@ -1,9 +1,13 @@
 import {Component, Input} from "@angular/core";
-import {ButtonColor, ButtonSize, Icons} from "@beats/beats-ui";
+import {Icons} from "../icon/icons-enum";
 import {ButtonBase} from "../button/button-base.directive";
 
-@Component({selector: 'beats-ui-round-icon-button', template: '', standalone: true})
-export class RoundIconButtonComponentMock extends ButtonBase {
+
+@Component({
+  selector: 'beats-ui-button',
+  template: '',
+  standalone: true
+})
+export class ButtonComponentMock extends ButtonBase {
   @Input() icon: Icons;
-  @Input() size: ButtonSize;
 }

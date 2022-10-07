@@ -10,10 +10,10 @@ import {Icons} from "@beats/beats-ui";
 export class ChannelComponent implements AfterViewInit {
   @Input() channel: Channel;
   @Output() deleteChannel = new EventEmitter<Channel>();
+  @Output() soloChannel = new EventEmitter<Channel>();
+  @Output() muteChannel = new EventEmitter<Channel>();
   @ViewChild('audio', {static: true}) previewElement: ElementRef<HTMLAudioElement>;
   @ViewChild('fileInput', {static: true}) fileInput: ElementRef<HTMLInputElement>;
-  private isMuted: boolean;
-  private _volume: number;
   public readonly icons = Icons;
 
   ngAfterViewInit(): void {
@@ -47,23 +47,18 @@ export class ChannelComponent implements AfterViewInit {
   }
 
   private setPreviewElementVolume(volume: number): void {
-    if (volume > 0) {
-      this._volume = volume;
-    }
     this.previewElement.nativeElement.volume = volume;
   }
 
   public onMute(): void {
-    this.isMuted = !this.isMuted;
-    this.channel.volume = this.isMuted ? 0 : this._volume;
-    this.setPreviewElementVolume(this.isMuted ? 0 : this._volume);
+    this.muteChannel.emit(this.channel);
   }
 
   public onSolo(): void {
-    this.channel.solo = !this.channel.solo;
+    this.soloChannel.emit(this.channel);
   }
 
-  onDeleteChannel(): void {
+  public onDeleteChannel(): void {
     this.deleteChannel.emit(this.channel);
   }
 }

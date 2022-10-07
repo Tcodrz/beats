@@ -135,27 +135,26 @@ describe('ChannelComponent', () => {
   });
 
   describe('onMute()', () => {
-    it('Should set the channel volume to 0 when isMuted is true', () => {
+    it('Should emit muteChannel event', () => {
+      const muteChannelEventSpy = jest.spyOn(component.muteChannel, 'emit');
       component.onMute();
-      expect(component.channel.volume).toBe(0);
-    });
-    it('Should set the channel volume to the original volume when isMuted is false', () => {
-      component['isMuted'] = true;
-      component['_volume'] = 0.7;
-      component.onMute();
-      expect(component.channel.volume).toBe(0.7);
+      expect(muteChannelEventSpy).toHaveBeenCalledWith(component.channel);
     });
   });
 
   describe('onSolo()', () => {
-    it('Should set channel.solo to true when channel.solo is false', () => {
+    it('Should emit soloChannel event', () => {
+      const soloChannelEventSpy = jest.spyOn(component.soloChannel, 'emit');
       component.onSolo();
-      expect(component.channel.solo).toBe(true);
+      expect(soloChannelEventSpy).toHaveBeenCalledWith(component.channel);
     });
-    it('Should set channel.solo to false when channel.solo is true', () => {
-      component.channel.solo = true;
-      component.onSolo();
-      expect(component.channel.solo).toBe(false);
+  });
+
+  describe('onDeleteChannel()', () => {
+    it('Should emit deleteChannel event', () => {
+      const deleteChannelEventSpy = jest.spyOn(component.deleteChannel, 'emit');
+      component.onDeleteChannel();
+      expect(deleteChannelEventSpy).toHaveBeenCalledWith(component.channel);
     });
   });
 });

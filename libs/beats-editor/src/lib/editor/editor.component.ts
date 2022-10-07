@@ -1,25 +1,61 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {EditorService} from "./editor.service";
 import {Channel} from "@beats/api-interfaces"
-import {Observable} from "rxjs";
+import {Observable, tap} from "rxjs";
+import {ButtonType, Icons} from "@beats/beats-ui";
 
 @Component({
   selector: 'beats-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorComponent implements OnInit {
-  channels$: Observable<Channel[]>;
+  public readonly buttonTypes = ButtonType;
+  public readonly icons = Icons;
+
+  public channels$: Observable<Channel[]>;
+  public isGlobalSoloActive: boolean;
+  public isGlobalMuteActive: boolean;
+
   constructor(
     private editorService: EditorService,
   ) {
   }
 
   ngOnInit(): void {
-    this.channels$ = this.editorService.getChannels();
+    this.channels$ = this.editorService.getChannels()
+      .pipe(
+        tap(channels => {
+          this.isGlobalMuteActive = channels.some(c => c.mute);
+          this.isGlobalSoloActive = channels.some(c => c.solo);
+        })
+      );
   }
 
   public onDeleteChannel(channel: Channel): void {
     this.editorService.deleteChannel(channel);
+  }
+
+  public onAddChannel(event: Event): void {
+    this.editorService.createNewChannel();
+  }
+
+  public onChannelSolo(channel: Channel): void {
+    this.editorService.soloChannel(channel);
+  }
+
+  public onChannelMute(channel: Channel): void {
+    this.editorService.muteChannel(channel);
+  }
+
+  public toggleGlobalSolo(): void {
+    this.isGlobalSoloActive = !this.isGlobalSoloActive;
+    this.editorService.toggleAllChannelSolo(this.isGlobalSoloActive);
+  }
+
+  public toggleGlobalMute(): void {
+    this.isGlobalMuteActive = !this.isGlobalMuteActive;
+    this.editorService.toggleAllChannelMute(this.isGlobalMuteActive);
   }
 }

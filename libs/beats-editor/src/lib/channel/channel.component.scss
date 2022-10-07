@@ -6,8 +6,11 @@
   align-items: center;
   column-gap: 16px;
 
-  .delete-channel {
+  .icons {
     padding-top: 8px;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
   }
 
   .channel-wrapper {
@@ -42,7 +45,6 @@
     .channel-beats {
       display: flex;
       justify-content: space-evenly;
-      max-width: 70%;
       padding: 4px 0;
       flex: 2;
 

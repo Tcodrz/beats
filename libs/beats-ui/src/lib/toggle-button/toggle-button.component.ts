@@ -15,5 +15,6 @@ export class ToggleButtonComponent extends ButtonBase {
   public onClick(): void {
     this.isActive = !this.isActive;
     this.stateChange.emit(this.isActive);
+    this.clicked.emit();
   }
 }

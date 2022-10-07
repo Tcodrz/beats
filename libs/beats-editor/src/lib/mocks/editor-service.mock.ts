@@ -7,6 +7,13 @@ export type EditorServiceMock = Partial<Record<keyof EditorService, Mock>>;
 
 export function getEditorServiceMock(): EditorServiceMock {
   return {
-    getChannels: fn(() => of(JSON.parse(JSON.stringify(channelsMock))))
+    getChannels: fn(() => of(JSON.parse(JSON.stringify(channelsMock)))),
+    getChannelsValue: fn(() => JSON.parse(JSON.stringify(channelsMock))),
+    deleteChannel: fn(),
+    createNewChannel: fn(),
+    toggleAllChannelSolo: fn(),
+    toggleAllChannelMute: fn(),
+    muteChannel: fn(),
+    soloChannel: fn(),
   }
 }

@@ -19,5 +19,6 @@ export * from './lib/button/button.module';
 /* MOCKS */
 export * from './lib/mocks/slider.component.mock';
 export * from './lib/mocks/button.component.mock';
+export * from './lib/mocks/round-icon.button.component.mock';
 export * from './lib/mocks/toggle-button.component.mock';
 export * from './lib/mocks/icon-button.component.mock';

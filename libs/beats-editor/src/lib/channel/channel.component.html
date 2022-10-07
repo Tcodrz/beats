@@ -1,14 +1,16 @@
-<beats-ui-icon-button class="delete-channel"
-                      [icon]="icons.trash"
-                      (clicked)="onDeleteChannel()"
->
-</beats-ui-icon-button>
+<div class="icons">
+  <beats-ui-icon-button [icon]="icons.drag_indicator"></beats-ui-icon-button>
+
+  <beats-ui-icon-button [icon]="icons.trash"
+                        (clicked)="onDeleteChannel()">
+  </beats-ui-icon-button>
+</div>
 <div class="channel-wrapper">
   <div class="channel-name">
     <beats-ui-icon-button [icon]="icons.upload" (clicked)="onLoadSample()"></beats-ui-icon-button>
-    <beats-ui-toggle-button (click)="onMute()" [text]="'m'"></beats-ui-toggle-button>
-    <beats-ui-toggle-button (click)="onSolo()" [text]="'s'"></beats-ui-toggle-button>
-    <beats-ui-knob [value]="channel.volume * 100" (valueChange)="onVolumeChange($event)" ></beats-ui-knob>
+    <beats-ui-toggle-button (click)="onMute()" [text]="'m'" [isActive]="channel.mute"></beats-ui-toggle-button>
+    <beats-ui-toggle-button (click)="onSolo()" [text]="'s'" [isActive]="channel.solo"></beats-ui-toggle-button>
+    <beats-ui-knob [value]="channel.mute ? 0 : channel.volume * 100" (valueChange)="onVolumeChange($event)"></beats-ui-knob>
     <div>
       {{ channel.name }}
     </div>
