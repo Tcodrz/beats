@@ -5,18 +5,21 @@
                      [icon]="icons.plus"
                      (clicked)="onAddChannel($event)">
     </beats-ui-button>
+
     <beats-ui-toggle-button [text]="'m'"
                             [isActive]="isGlobalMuteActive"
-                            (clicked)="toggleGlobalMute()"
-    >
+                            (clicked)="toggleGlobalMute()">
     </beats-ui-toggle-button>
+
     <beats-ui-toggle-button [text]="'s'"
                             [isActive]="isGlobalSoloActive"
                             (clicked)="toggleGlobalSolo()">
     </beats-ui-toggle-button>
   </div>
 
-  <div class="channels">
+  <div class="channels"
+       cdkDropList
+       (cdkDropListDropped)="onDropChannel($event)">
 
     <beats-channel *ngFor="let channel of channels$ | async"
                    [channel]="channel"

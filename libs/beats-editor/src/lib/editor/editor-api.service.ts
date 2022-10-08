@@ -22,14 +22,16 @@ export class EditorApiService {
   }
 
   deleteChannel(channel: Channel): Observable<Channel[]> {
+    this.channels = this.channels.filter(c => c.id !== channel.id);
     return new Observable<Channel[]>(observer => {
-      observer.next(this.channels.filter(c => c.id !== channel.id));
+      observer.next(this.channels);
     });
   }
 
   addChannel(channel: Channel): Observable<Channel[]> {
     return new Observable<Channel[]>(observer => {
-      observer.next([...this.channels, channel]);
+      this.channels.push(channel);
+      observer.next(this.channels);
     });
   }
 

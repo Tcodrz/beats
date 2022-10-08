@@ -2,75 +2,78 @@
 @import "../../../../../apps/beats/src/assets/scss/constants";
 
 :host {
-  display: flex;
-  align-items: center;
-  column-gap: 16px;
+  .channel {
 
-  .icons {
-    padding-top: 8px;
     display: flex;
     align-items: center;
-    column-gap: 8px;
-  }
+    column-gap: 16px;
 
-  .channel-wrapper {
-    user-select: none;
-    display: flex;
-    flex: 1;
-    margin-top: 8px;
-    min-height: 40px;
-    align-items: center;
-    border: 1px solid $clr-grey-2;
-    border-radius: $border-radius;
-    justify-content: space-between;
-    padding: 0 16px 0 0;
-
-    .audio{
-      display: none;
+    .icons {
+      padding-top: 8px;
+      display: flex;
+      align-items: center;
+      column-gap: 8px;
     }
 
-    .channel-name {
-      background-color: $clr-white-1;
+    .channel-wrapper {
+      user-select: none;
+      display: flex;
+      flex: 1;
+      margin-top: 8px;
+      min-height: 40px;
+      align-items: center;
       border: 1px solid $clr-grey-2;
       border-radius: $border-radius;
-      display: flex;
-      width: 350px;
-      column-gap: 16px;
-      align-items: center;
-      place-content: center start;
-      min-height: inherit;
-      padding: 0 8px;
-    }
+      justify-content: space-between;
+      padding: 0 16px 0 0;
 
-    .channel-beats {
-      display: flex;
-      justify-content: space-evenly;
-      padding: 4px 0;
-      flex: 2;
+      .audio {
+        display: none;
+      }
 
-      .beat-group {
+      .channel-name {
+        background-color: $clr-white-1;
+        border: 1px solid $clr-grey-2;
+        border-radius: $border-radius;
         display: flex;
-        margin-left: 12px;
+        width: 350px;
+        column-gap: 16px;
+        align-items: center;
+        place-content: center start;
+        min-height: inherit;
+        padding: 0 8px;
+      }
 
-        .beat {
-          width: 16px;
-          height: 32px;
-          border: 1px solid $clr-grey-2;
-          border-radius: $border-radius;
-          margin-left: 8px;
-        }
+      .channel-beats {
+        display: flex;
+        justify-content: space-evenly;
+        padding: 4px 0;
+        flex: 2;
 
-        .beat-on {
-          background-color: #ffbb3d;
-          box-shadow: 0 0 16px #ffd600;
-        }
+        .beat-group {
+          display: flex;
+          margin-left: 12px;
 
-        .beat-off {
-          background-color: $clr-white-1;
-          box-shadow: none;
+          .beat {
+            width: 16px;
+            height: 32px;
+            border: 1px solid $clr-grey-2;
+            border-radius: $border-radius;
+            margin-left: 8px;
+          }
+
+          .beat-on {
+            background-color: #ffbb3d;
+            box-shadow: 0 0 16px #ffd600;
+          }
+
+          .beat-off {
+            background-color: $clr-white-1;
+            box-shadow: none;
+          }
         }
       }
     }
-  }
 
+  }
 }

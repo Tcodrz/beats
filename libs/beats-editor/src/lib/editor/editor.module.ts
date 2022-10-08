@@ -5,6 +5,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {ChannelModule} from "../channel/channel.module";
 import {PlayerModule} from "@beats/beats-player";
 import {ButtonModule, ToggleButtonModule} from "@beats/beats-ui";
+import {DragDropModule} from "@angular/cdk/drag-drop";
 
 const routes: Routes = [
   {path: '', component: EditorComponent}
@@ -18,7 +19,8 @@ const routes: Routes = [
     ChannelModule,
     PlayerModule,
     ButtonModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    DragDropModule,
   ],
 })
 export class EditorModule {

@@ -3,6 +3,7 @@ import {EditorService} from "./editor.service";
 import {Channel} from "@beats/api-interfaces"
 import {Observable, tap} from "rxjs";
 import {ButtonType, Icons} from "@beats/beats-ui";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'beats-editor',
@@ -57,5 +58,9 @@ export class EditorComponent implements OnInit {
   public toggleGlobalMute(): void {
     this.isGlobalMuteActive = !this.isGlobalMuteActive;
     this.editorService.toggleAllChannelMute(this.isGlobalMuteActive);
+  }
+
+  public onDropChannel<T>(event: CdkDragDrop<T, Channel>): void {
+    moveItemInArray(this.editorService.getChannelsValue(), event.previousIndex, event.currentIndex);
   }
 }

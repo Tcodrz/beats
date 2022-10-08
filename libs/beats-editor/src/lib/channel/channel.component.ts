@@ -15,6 +15,7 @@ export class ChannelComponent implements AfterViewInit {
   @ViewChild('audio', {static: true}) previewElement: ElementRef<HTMLAudioElement>;
   @ViewChild('fileInput', {static: true}) fileInput: ElementRef<HTMLInputElement>;
   public readonly icons = Icons;
+  showDragHandle: boolean;
 
   ngAfterViewInit(): void {
     this.setPreviewElementVolume(this.channel.volume);

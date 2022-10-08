@@ -1,34 +1,45 @@
-<div class="icons">
-  <beats-ui-icon-button [icon]="icons.drag_indicator"></beats-ui-icon-button>
+<div class="channel"
+     cdkDrag
+     cdkDragPreviewContainer="parent"
+     (mouseover)="showDragHandle = true"
+     (mouseleave)="showDragHandle = false">
 
-  <beats-ui-icon-button [icon]="icons.trash"
-                        (clicked)="onDeleteChannel()">
-  </beats-ui-icon-button>
-</div>
-<div class="channel-wrapper">
-  <div class="channel-name">
-    <beats-ui-icon-button [icon]="icons.upload" (clicked)="onLoadSample()"></beats-ui-icon-button>
-    <beats-ui-toggle-button (click)="onMute()" [text]="'m'" [isActive]="channel.mute"></beats-ui-toggle-button>
-    <beats-ui-toggle-button (click)="onSolo()" [text]="'s'" [isActive]="channel.solo"></beats-ui-toggle-button>
-    <beats-ui-knob [value]="channel.mute ? 0 : channel.volume * 100" (valueChange)="onVolumeChange($event)"></beats-ui-knob>
-    <div>
-      {{ channel.name }}
+  <div class="icons">
+    <beats-ui-icon-button cdkDragHandle
+                          [style.visibility]="showDragHandle ? 'visible' : 'hidden'"
+                          [icon]="icons.drag_indicator">
+    </beats-ui-icon-button>
+
+    <beats-ui-icon-button [icon]="icons.trash"
+                          (clicked)="onDeleteChannel()">
+    </beats-ui-icon-button>
+  </div>
+  <div class="channel-wrapper">
+    <div class="channel-name">
+      <beats-ui-icon-button [icon]="icons.upload" (clicked)="onLoadSample()"></beats-ui-icon-button>
+      <beats-ui-toggle-button (click)="onMute()" [text]="'m'" [isActive]="channel.mute"></beats-ui-toggle-button>
+      <beats-ui-toggle-button (click)="onSolo()" [text]="'s'" [isActive]="channel.solo"></beats-ui-toggle-button>
+      <beats-ui-knob [value]="channel.mute ? 0 : channel.volume * 100"
+                     (valueChange)="onVolumeChange($event)"></beats-ui-knob>
+      <div>
+        {{ channel.name }}
+      </div>
     </div>
-  </div>
 
-  <div class="audio">
-    <input type="file" accept="audio/*" (input)="onUploadFile($event)" #fileInput>
-    <audio #audio></audio>
-  </div>
+    <div class="audio">
+      <input type="file" accept="audio/*" (input)="onUploadFile($event)" #fileInput>
+      <audio #audio></audio>
+    </div>
 
-  <div class="channel-beats">
+    <div class="channel-beats">
 
-    <div *ngFor="let beatGroup of channel.beats"
-         class="beat-group">
-      <div class="beat" *ngFor="let beat of beatGroup"
-           [ngClass]="beat.on ? 'beat-on' : 'beat-off'"
-           (click)="onBeatClicked(beat)">
+      <div *ngFor="let beatGroup of channel.beats"
+           class="beat-group">
+        <div class="beat" *ngFor="let beat of beatGroup"
+             [ngClass]="beat.on ? 'beat-on' : 'beat-off'"
+             (click)="onBeatClicked(beat)">
 
+        </div>
       </div>
     </div>
   </div>
