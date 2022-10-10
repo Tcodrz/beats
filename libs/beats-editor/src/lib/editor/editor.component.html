@@ -1,20 +1,12 @@
 <div class="wrapper">
 
   <div class="toolbar">
-    <beats-ui-button [type]="buttonTypes.flat"
-                     [icon]="icons.plus"
-                     (clicked)="onAddChannel($event)">
-    </beats-ui-button>
-
-    <beats-ui-toggle-button [text]="'m'"
-                            [isActive]="isGlobalMuteActive"
-                            (clicked)="toggleGlobalMute()">
-    </beats-ui-toggle-button>
-
-    <beats-ui-toggle-button [text]="'s'"
-                            [isActive]="isGlobalSoloActive"
-                            (clicked)="toggleGlobalSolo()">
-    </beats-ui-toggle-button>
+    <beats-toolbar [soloActive]="isGlobalSoloActive"
+                   [muteActive]="isGlobalMuteActive"
+                   (addClicked)="onAddChannel($event)"
+                   (muteClicked)="toggleGlobalMute()"
+                   (soloClicked)="toggleGlobalSolo()">
+    </beats-toolbar>
   </div>
 
   <div class="channels"

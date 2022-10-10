@@ -1,0 +1,17 @@
+<beats-ui-button class="add-button"
+                 [type]="buttonTypes.flat"
+                 [icon]="icons.plus"
+                 (clicked)="addClicked.emit($event)">
+</beats-ui-button>
+
+<beats-ui-toggle-button class="mute-button"
+                        [text]="'m'"
+                        [isActive]="muteActive"
+                        (clicked)="muteClicked.emit()">
+</beats-ui-toggle-button>
+
+<beats-ui-toggle-button class="solo-button"
+                        [text]="'s'"
+                        [isActive]="soloActive"
+                        (clicked)="soloClicked.emit()">
+</beats-ui-toggle-button>

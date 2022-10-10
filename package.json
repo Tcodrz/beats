@@ -11,7 +11,8 @@
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2020 browser module main",
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test beats --watchAll --verbose"
+    "test": "nx test beats --watchAll --verbose",
+    "beats":  "nx run-many --target=serve --projects=\"beats,api\""
   },
   "private": true,
   "dependencies": {

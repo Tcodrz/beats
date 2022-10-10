@@ -8,6 +8,7 @@ import {channelsMock} from "./editor-data.mock";
 import {of} from "rxjs";
 import {ButtonComponentMock, ToggleButtonComponentMock} from "@beats/beats-ui";
 import {Channel} from "@beats/api-interfaces";
+import {ToolbarComponentMock} from "../mocks/toolbar.component.mock";
 
 describe('EditorComponent', () => {
   let component: EditorComponent;
@@ -24,7 +25,8 @@ describe('EditorComponent', () => {
         ChannelComponentMock,
         PlayerComponentMock,
         ToggleButtonComponentMock,
-        ButtonComponentMock
+        ButtonComponentMock,
+        ToolbarComponentMock
       ],
       providers: [
         {provide: EditorService, useValue: editorServiceMock},
@@ -85,6 +87,7 @@ describe('EditorComponent', () => {
       expect(editorServiceMock.deleteChannel).toHaveBeenCalledWith({});
     });
   });
+
   describe('onAddChannel()', () => {
     it('Should call editorService.createNewChannel', () => {
       component.onAddChannel({} as Event);

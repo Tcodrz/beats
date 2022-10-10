@@ -6,6 +6,7 @@ import {ChannelModule} from "../channel/channel.module";
 import {PlayerModule} from "@beats/beats-player";
 import {ButtonModule, ToggleButtonModule} from "@beats/beats-ui";
 import {DragDropModule} from "@angular/cdk/drag-drop";
+import {ToolbarModule} from "../toolbar/toolbar.module";
 
 const routes: Routes = [
   {path: '', component: EditorComponent}
@@ -13,15 +14,14 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [EditorComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    ChannelModule,
-    PlayerModule,
-    ButtonModule,
-    ToggleButtonModule,
-    DragDropModule,
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        ChannelModule,
+        PlayerModule,
+        DragDropModule,
+        ToolbarModule,
+    ],
 })
 export class EditorModule {
 }
