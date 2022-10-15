@@ -11,6 +11,11 @@ $knob-indicator-margin: 18px;
 $knob-indicator-width: 4px;
 $knob-indicator-height: 10px;
 
+:host {
+  display: inline-block;
+  height: 40px;
+}
+
 .knob {
   background: linear-gradient(0deg, $knob-color-light 0%, $knob-color-dark 100%);
   width: $knob-width;
@@ -36,4 +41,9 @@ $knob-indicator-height: 10px;
     background-color: $knob-indicator-color;
     box-shadow: 0 0 10px #349beb;
   }
+}
+
+.text {
+  font-size: 10px;
+  line-height: 1.1;
 }

@@ -1,6 +1,9 @@
 <div class="knob">
   <div class="indicator"
        #knob
-       (mousedown)="onChange()">
+       (mousedown)="onMouseClick()">
+  </div>
+  <div class="text">
+    <ng-content select="[text]"></ng-content>
   </div>
 </div>
