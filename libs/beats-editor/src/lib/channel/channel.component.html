@@ -15,13 +15,22 @@
     </beats-ui-icon-button>
   </div>
   <div class="channel-wrapper">
-    <div class="channel-name">
+    <div class="channel-actions">
       <beats-ui-icon-button [icon]="icons.upload" (clicked)="onLoadSample()"></beats-ui-icon-button>
       <beats-ui-toggle-button (click)="onMute()" [text]="'m'" [isActive]="channel.mute"></beats-ui-toggle-button>
       <beats-ui-toggle-button (click)="onSolo()" [text]="'s'" [isActive]="channel.solo"></beats-ui-toggle-button>
       <beats-ui-knob [value]="channel.mute ? 0 : channel.volume * 100"
-                     (valueChange)="onVolumeChange($event)"></beats-ui-knob>
-      <div>
+                     (valueChange)="onVolumeChange($event)">
+        <ng-container text>Volume</ng-container>
+      </beats-ui-knob>
+
+      <beats-ui-knob [value]="channelPanValue" (valueChange)="onChannelPan($event)" [halfCircle]="true">
+        <div text class="pan-knob-text">
+          <div>L</div>
+          <div>R</div>
+        </div>
+      </beats-ui-knob>
+      <div class="channel-name">
         {{ channel.name }}
       </div>
     </div>

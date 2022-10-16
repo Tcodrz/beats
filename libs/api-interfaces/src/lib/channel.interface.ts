@@ -8,6 +8,8 @@ export interface Channel {
   volume: number;
   mute?: boolean;
   solo?: boolean;
+  panValue: number;
+  audioBufferData?: AudioBuffer;
 }
 
 export interface Beat {

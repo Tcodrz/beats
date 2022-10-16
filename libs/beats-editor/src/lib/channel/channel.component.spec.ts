@@ -18,6 +18,7 @@ const channelMock: Channel = {
   volume: 0.7,
   mute: false,
   solo: false,
+  panValue: 0,
 }
 
 @Component({
@@ -27,6 +28,7 @@ const channelMock: Channel = {
 })
 class KnobComponentMock {
   @Input() value: number;
+  @Input() halfCircle: boolean;
   @Output() valueChange = new EventEmitter();
 }
 
@@ -69,10 +71,29 @@ describe('ChannelComponent', () => {
     });
   });
 
+  describe('ngOnChanges()', () => {
+    it('Should set the channelPanValue to 50 when called with 0', () => {
+      component.channel.panValue = 0;
+      component.ngOnChanges();
+      expect(component.channelPanValue).toEqual(50);
+    });
+    it('Should set the channelPanValue to 0 when called with -3.4', () => {
+      component.channel.panValue = -3.4;
+      component.ngOnChanges();
+      expect(component.channelPanValue).toEqual(0);
+    });
+    it('Should set the channelPanValue to 100 when called with 3.4', () => {
+      component.channel.panValue = 3.4;
+      component.ngOnChanges();
+      expect(component.channelPanValue).toEqual(100);
+    });
+  });
+
   describe('onUploadFile()', () => {
     let fileURLMock;
     let fileMock;
     let volumeMock;
+    let channelSampleChangeSpy;
 
     beforeEach(() => {
       volumeMock = 70;
@@ -80,6 +101,7 @@ describe('ChannelComponent', () => {
       fileMock = {
         name: 'file_mock'
       };
+      channelSampleChangeSpy = jest.spyOn(component.channelSampleChange, 'emit');
       component.previewElement.nativeElement.play = jest.fn(() => Promise.resolve());
       global.URL.createObjectURL = jest.fn(() => fileURLMock);
       component.onUploadFile({
@@ -109,6 +131,10 @@ describe('ChannelComponent', () => {
 
     it('Should set the previewElement volumeMock to the volumeMock element value / 100', () => {
       expect(component.previewElement.nativeElement.volume).toEqual(volumeMock / 100);
+    });
+
+    it('Should emit channelSampleChange event', () => {
+      expect(channelSampleChangeSpy).toHaveBeenCalledWith(component.channel);
     });
   });
 
@@ -155,6 +181,14 @@ describe('ChannelComponent', () => {
       const deleteChannelEventSpy = jest.spyOn(component.deleteChannel, 'emit');
       component.onDeleteChannel();
       expect(deleteChannelEventSpy).toHaveBeenCalledWith(component.channel);
+    });
+  });
+
+  describe('onChannelPan()', () => {
+    it('Should emit panChannel event with pan value', () => {
+      const panChannelSpy = jest.spyOn(component.panChannel, 'emit');
+      component.onChannelPan(1);
+      expect(panChannelSpy).toHaveBeenCalledWith(1);
     });
   });
 });

@@ -1,4 +1,13 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {Beat, Channel} from "@beats/api-interfaces";
 import {Icons} from "@beats/beats-ui";
 
@@ -7,15 +16,22 @@ import {Icons} from "@beats/beats-ui";
   templateUrl: './channel.component.html',
   styleUrls: ['./channel.component.scss'],
 })
-export class ChannelComponent implements AfterViewInit {
+export class ChannelComponent implements OnChanges, AfterViewInit {
   @Input() channel: Channel;
   @Output() deleteChannel = new EventEmitter<Channel>();
   @Output() soloChannel = new EventEmitter<Channel>();
   @Output() muteChannel = new EventEmitter<Channel>();
+  @Output() panChannel = new EventEmitter<number>();
+  @Output() channelSampleChange = new EventEmitter<Channel>();
   @ViewChild('audio', {static: true}) previewElement: ElementRef<HTMLAudioElement>;
   @ViewChild('fileInput', {static: true}) fileInput: ElementRef<HTMLInputElement>;
   public readonly icons = Icons;
   showDragHandle: boolean;
+  channelPanValue: number;
+
+  ngOnChanges(): void {
+    this.channelPanValue = Math.floor(((this.channel.panValue / 3.4 / 2) + 0.5) * 100);
+  }
 
   ngAfterViewInit(): void {
     this.setPreviewElementVolume(this.channel.volume);
@@ -35,6 +51,7 @@ export class ChannelComponent implements AfterViewInit {
     this.channel.name = file.name;
     this.previewElement.nativeElement.src = fileURL;
     this.channel.fileURL = fileURL;
+    this.channelSampleChange.emit(this.channel);
     this.previewElement.nativeElement.play().then();
   }
 
@@ -61,5 +78,9 @@ export class ChannelComponent implements AfterViewInit {
 
   public onDeleteChannel(): void {
     this.deleteChannel.emit(this.channel);
+  }
+
+  public onChannelPan(panValue: number): void {
+    this.panChannel.emit(panValue);
   }
 }

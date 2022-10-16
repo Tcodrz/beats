@@ -7,6 +7,7 @@ export function generateChannelId(): ChannelID {
 export const kickChannelMock: Channel = {
   name: 'Kick',
   volume: 0.7,
+  panValue: 0,
   id: generateChannelId(),
   beats: [
     [
@@ -36,6 +37,7 @@ export const kickChannelMock: Channel = {
 export const bassChannelMock: Channel = {
   name: 'Bass',
   volume: 0.7,
+  panValue: 0,
   id: generateChannelId(),
   beats: [
     [
@@ -65,6 +67,7 @@ export const bassChannelMock: Channel = {
 export const hihatChannelMock: Channel = {
   name: 'Hi-hat',
   volume: 0.7,
+  panValue: 0,
   id: generateChannelId(),
   beats: [
     [
@@ -93,6 +96,7 @@ export const hihatChannelMock: Channel = {
 export const snareChannelMock: Channel = {
   name: 'Snare',
   volume: 0.7,
+  panValue: 0,
   id: generateChannelId(),
   beats: [
     [
