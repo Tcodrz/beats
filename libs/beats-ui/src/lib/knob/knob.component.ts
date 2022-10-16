@@ -9,6 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {DEGREES_OFFSET, HALF_CIRCLE_DEG_OFFSET, KnobService, TO_DEG_MULTIPLIER} from "./knob.service";
+import {debounceTime} from "rxjs";
 
 @Component({
   selector: 'beats-ui-knob',
@@ -24,9 +25,7 @@ export class KnobComponent implements OnInit {
   }
 
   @Input() set halfCircle(value: boolean) {
-    if (value) {
-      this.degreeOffset = HALF_CIRCLE_DEG_OFFSET;
-    }
+    this.degreeOffset = value ? HALF_CIRCLE_DEG_OFFSET : DEGREES_OFFSET;
   }
 
   @Output() valueChange = new EventEmitter<number>();
@@ -42,9 +41,11 @@ export class KnobComponent implements OnInit {
 
   ngOnInit(): void {
     this.knobService.initListeners(this.degreeValue, this.degreeOffset, this.knob.nativeElement);
-    this.knobService.getValue().subscribe(normalizedValue => {
-      this.valueChange.emit(normalizedValue);
-    });
+    this.knobService.getValue()
+      .pipe(debounceTime(150))
+      .subscribe(normalizedValue => {
+        this.valueChange.emit(normalizedValue);
+      });
   }
 
   public onMouseClick(): void {
