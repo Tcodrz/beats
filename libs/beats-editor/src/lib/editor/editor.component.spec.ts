@@ -134,4 +134,18 @@ describe('EditorComponent', () => {
       expect(editorServiceMock.toggleAllChannelMute).toHaveBeenCalledWith(true);
     });
   });
+
+  describe('onChannelPan()', () => {
+    it('Should call editorService.setChannelPanValue with channel and new pan value', () => {
+      component.onChannelPan(10, {id: 1, name: 'mock channel'} as Channel);
+      expect(editorServiceMock.setChannelPanValue).toHaveBeenCalledWith({id: 1, name: 'mock channel'}, 10);
+    });
+  });
+
+  describe('onChannelSampleLoaded()', () => {
+    it('Should call editorService.addAudioBufferDataToChannel with channel', () => {
+      component.onChannelSampleLoaded({id: 1, name: 'mock channel'} as Channel);
+      expect(editorServiceMock.addAudioBufferDataToChannel).toHaveBeenCalledWith({id: 1, name: 'mock channel'});
+    });
+  });
 });

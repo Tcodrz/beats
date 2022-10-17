@@ -15,5 +15,7 @@ export function getEditorServiceMock(): EditorServiceMock {
     toggleAllChannelMute: fn(),
     muteChannel: fn(),
     soloChannel: fn(),
+    setChannelPanValue: fn(),
+    addAudioBufferDataToChannel: fn(() => Promise.resolve())
   }
 }

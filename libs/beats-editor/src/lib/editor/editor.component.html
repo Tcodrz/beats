@@ -18,6 +18,8 @@
                    (deleteChannel)="onDeleteChannel($event)"
                    (soloChannel)="onChannelSolo($event)"
                    (muteChannel)="onChannelMute($event)"
+                   (panChannel)="onChannelPan($event, channel)"
+                   (channelSampleChange)="onChannelSampleLoaded($event)"
     ></beats-channel>
   </div>
 

@@ -63,4 +63,12 @@ export class EditorComponent implements OnInit {
   public onDropChannel<T>(event: CdkDragDrop<T, Channel>): void {
     moveItemInArray(this.editorService.getChannelsValue(), event.previousIndex, event.currentIndex);
   }
+
+  public onChannelPan(panValue: number, channel: Channel): void {
+    this.editorService.setChannelPanValue(channel, panValue);
+  }
+
+  public onChannelSampleLoaded(channel: Channel): void {
+    this.editorService.addAudioBufferDataToChannel(channel).then();
+  }
 }
