@@ -1,8 +1,13 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {ChannelComponent} from './channel.component';
 import {Bar, Channel} from "@beats/api-interfaces";
-import {IconButtonComponentMock, ToggleButtonComponentMock} from "@beats/beats-ui";
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {IconButtonComponent, KnobComponent, ToggleButtonComponent} from "@beats/beats-ui";
+import {EditorService} from "../editor/editor.service";
+import {EditorServiceMock, getEditorServiceMock} from "../mocks/editor-service.mock";
+import {MockComponent} from "ng-mocks";
+import {ChannelService} from "@beats/beats-editor";
+import {of} from "rxjs";
+
 
 const beatsMock: [Bar, Bar, Bar, Bar] = [
   [{on: false}, {on: false}, {on: false}, {on: false}],
@@ -21,88 +26,118 @@ const channelMock: Channel = {
   panValue: 0,
 }
 
-@Component({
-  selector: 'beats-ui-knob',
-  template: '',
-  standalone: true,
-})
-class KnobComponentMock {
-  @Input() value: number;
-  @Input() halfCircle: boolean;
-  @Output() valueChange = new EventEmitter();
+function getChannelServiceMock(): Partial<ChannelService> {
+  return {
+    setChannel: jest.fn(),
+    addAudioBufferDataToChannel: jest.fn(() => Promise.resolve()),
+    play: jest.fn(),
+    playOnce: jest.fn(),
+    stop: jest.fn(),
+    setChannelPanValue: jest.fn(),
+    toggleChannelSolo: jest.fn(),
+    setChannelSolo: jest.fn(),
+    muteChannel: jest.fn(),
+  }
 }
 
 describe('ChannelComponent', () => {
   let component: ChannelComponent;
   let fixture: ComponentFixture<ChannelComponent>;
+  let editorServiceMock: EditorServiceMock;
+  let channelServiceMock: Partial<ChannelService>;
 
   beforeEach(async () => {
+
+    editorServiceMock = getEditorServiceMock();
+
+    channelServiceMock = getChannelServiceMock();
+
+    TestBed.overrideComponent(ChannelComponent, {
+      set: {
+        providers: [
+          {provide: ChannelService, useValue: channelServiceMock}
+        ]
+      }
+    })
+
     await TestBed.configureTestingModule({
-      declarations: [ChannelComponent],
-      imports: [ToggleButtonComponentMock, KnobComponentMock, IconButtonComponentMock]
+      declarations: [
+        ChannelComponent,
+        MockComponent(KnobComponent),
+        MockComponent(IconButtonComponent),
+        MockComponent(ToggleButtonComponent),
+      ],
+      providers: [
+        {provide: EditorService, useValue: editorServiceMock}
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ChannelComponent);
     component = fixture.componentInstance;
-    component.channel = channelMock;
+    component.setChannel = channelMock;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture.destroy();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('onBeatClicked()', () => {
-    let beat;
-    beforeEach(() => {
-      beat = {on: false};
+  describe('ngOnInit()', () => {
+    it('Should call editorService.isPlaying', () => {
+      expect(editorServiceMock.isPlaying).toHaveBeenCalled();
     });
-
-    it('Should set beat.on to true when beat.on is false', () => {
-      component.onBeatClicked(beat);
-      expect(beat.on).toBe(true);
+    it('Should call channelService.play when isPlaying is true', () => {
+      editorServiceMock.isPlaying.mockImplementation(() => of(true));
+      component.ngOnInit();
+      expect(channelServiceMock.play).toHaveBeenCalled();
     });
-
-    it('Should call the previewElement play method when previewElement.src is initialized', () => {
-      component.previewElement.nativeElement.src = 'mock';
-      component.previewElement.nativeElement.play = jest.fn(() => Promise.resolve());
-      component.onBeatClicked(beat);
-      expect(component.previewElement.nativeElement.play).toHaveBeenCalled();
+    it('Should call channelService.stop when isPlaying is false', () => {
+      editorServiceMock.isPlaying.mockImplementation(() => of(false));
+      component.ngOnInit();
+      expect(channelServiceMock.stop).toHaveBeenCalled();
     });
   });
 
-  describe('ngOnChanges()', () => {
-    it('Should set the channelPanValue to 50 when called with 0', () => {
-      component.channel.panValue = 0;
-      component.ngOnChanges();
-      expect(component.channelPanValue).toEqual(50);
+  describe('ngOnDestroy()', () => {
+    it('Should call channelService.stop', () => {
+      component.ngOnDestroy();
+      expect(channelServiceMock.stop).toHaveBeenCalled();
     });
-    it('Should set the channelPanValue to 0 when called with -3.4', () => {
-      component.channel.panValue = -3.4;
-      component.ngOnChanges();
-      expect(component.channelPanValue).toEqual(0);
+  });
+
+  describe('onBeatClicked()', () => {
+    let mockBeat;
+    it('Should set beat.on to true when called with beat.on = false', () => {
+      mockBeat = {on: false};
+      component.onBeatClicked(mockBeat);
+      expect(mockBeat.on).toBe(true);
     });
-    it('Should set the channelPanValue to 100 when called with 3.4', () => {
-      component.channel.panValue = 3.4;
-      component.ngOnChanges();
-      expect(component.channelPanValue).toEqual(100);
+    it('Should set beat.on to false when called with beat.on = true', () => {
+      mockBeat = {on: true};
+      component.onBeatClicked(mockBeat);
+      expect(mockBeat.on).toBe(false);
+    });
+    it('Should call channelService.playOnce when beat.on is true and isPlaying is false', () => {
+      mockBeat = {on: false};
+      component['isPlaying'] = false;
+      component.onBeatClicked(mockBeat);
+      expect(channelServiceMock.playOnce).toHaveBeenCalledWith(channelMock);
     });
   });
 
   describe('onUploadFile()', () => {
     let fileURLMock;
     let fileMock;
-    let volumeMock;
-    let channelSampleChangeSpy;
 
     beforeEach(() => {
-      volumeMock = 70;
       fileURLMock = 'mock_file_url';
       fileMock = {
         name: 'file_mock'
       };
-      channelSampleChangeSpy = jest.spyOn(component.channelSampleChange, 'emit');
-      component.previewElement.nativeElement.play = jest.fn(() => Promise.resolve());
       global.URL.createObjectURL = jest.fn(() => fileURLMock);
       component.onUploadFile({
         target: {
@@ -121,21 +156,20 @@ describe('ChannelComponent', () => {
       expect(component.channel.name).toEqual('file_mock');
     });
 
-    it('Should set the previewElement src with the file url', () => {
-      expect(component.previewElement.nativeElement.src).toEqual(`http://localhost/${fileURLMock}`);
-    });
-
     it('Should set the channel fileURL with file url returned from URL.createObjectURL', () => {
       expect(component.channel.fileURL).toEqual(fileURLMock);
     });
 
-    it('Should set the previewElement volumeMock to the volumeMock element value / 100', () => {
-      expect(component.previewElement.nativeElement.volume).toEqual(volumeMock / 100);
+    it('Should call channelService.addAudioBufferDataToChannel with channel', () => {
+      expect(channelServiceMock.addAudioBufferDataToChannel).toHaveBeenCalledWith(channelMock);
     });
 
-    it('Should emit channelSampleChange event', () => {
-      expect(channelSampleChangeSpy).toHaveBeenCalledWith(component.channel);
-    });
+    it('Should call channelService.playOnce when isPlaying is false', fakeAsync(() => {
+      component['isPlaying'] = false;
+      component.onUploadFile({target: {files: {item: () => fileMock}}});
+      tick();
+      expect(channelServiceMock.playOnce).toHaveBeenCalledWith(channelMock);
+    }));
   });
 
   describe('onLoadSample()', () => {
@@ -153,27 +187,20 @@ describe('ChannelComponent', () => {
     it('Should set the channel volume to the value in the event divided by 100', () => {
       expect(component.channel.volume).toEqual(0.7);
     });
-
-    it('Should set the preview element volume to the value in the event divided by 100', () => {
-      expect(component.previewElement.nativeElement.volume).toEqual(0.7);
-    });
-
   });
 
   describe('onMute()', () => {
-    it('Should emit muteChannel event', () => {
-      const muteChannelEventSpy = jest.spyOn(component.muteChannel, 'emit');
+    it('Should call channelService.muteChannel', () => {
       component.onMute();
-      expect(muteChannelEventSpy).toHaveBeenCalledWith(component.channel);
-    });
+      expect(channelServiceMock.muteChannel).toHaveBeenCalled();
+    })
   });
 
   describe('onSolo()', () => {
-    it('Should emit soloChannel event', () => {
-      const soloChannelEventSpy = jest.spyOn(component.soloChannel, 'emit');
+    it('Should call channelService.soloChannel', () => {
       component.onSolo();
-      expect(soloChannelEventSpy).toHaveBeenCalledWith(component.channel);
-    });
+      expect(channelServiceMock.setChannelSolo).toHaveBeenCalled();
+    })
   });
 
   describe('onDeleteChannel()', () => {
@@ -185,10 +212,9 @@ describe('ChannelComponent', () => {
   });
 
   describe('onChannelPan()', () => {
-    it('Should emit panChannel event with pan value', () => {
-      const panChannelSpy = jest.spyOn(component.panChannel, 'emit');
+    it('Should call channelService.setChannelPanValue with pan value', () => {
       component.onChannelPan(1);
-      expect(panChannelSpy).toHaveBeenCalledWith(1);
+      expect(channelServiceMock.setChannelPanValue).toHaveBeenCalledWith(1);
     });
   });
 });

@@ -1,58 +1,69 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  ViewChild
-} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Beat, Channel} from "@beats/api-interfaces";
 import {Icons} from "@beats/beats-ui";
+import {EditorService} from "../editor/editor.service";
+import {ChannelService} from "./channel.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'beats-channel',
   templateUrl: './channel.component.html',
   styleUrls: ['./channel.component.scss'],
+  providers: [ChannelService]
 })
-export class ChannelComponent implements OnChanges, AfterViewInit {
-  @Input() channel: Channel;
+export class ChannelComponent implements OnInit, OnDestroy {
+  @Input('channel') set setChannel(value: Channel) {
+    this.channel = value;
+    this.channelPanValue = Math.floor(((this.channel.panValue / 3.4 / 2) + 0.5) * 100);
+    this.channelService.setChannel(this.channel);
+  }
+
   @Output() deleteChannel = new EventEmitter<Channel>();
-  @Output() soloChannel = new EventEmitter<Channel>();
-  @Output() muteChannel = new EventEmitter<Channel>();
-  @Output() panChannel = new EventEmitter<number>();
-  @Output() channelSampleChange = new EventEmitter<Channel>();
-  @ViewChild('audio', {static: true}) previewElement: ElementRef<HTMLAudioElement>;
   @ViewChild('fileInput', {static: true}) fileInput: ElementRef<HTMLInputElement>;
   public readonly icons = Icons;
   showDragHandle: boolean;
   channelPanValue: number;
+  channel: Channel;
+  private isPlaying: boolean;
+  private playSubscription: Subscription;
 
-  ngOnChanges(): void {
-    this.channelPanValue = Math.floor(((this.channel.panValue / 3.4 / 2) + 0.5) * 100);
+  constructor(
+    private editor: EditorService,
+    private channelService: ChannelService,
+  ) { }
+
+  ngOnInit(): void {
+    this.playSubscription = this.editor.isPlaying()
+      .subscribe(isPlaying => {
+        this.isPlaying = isPlaying;
+        if (this.isPlaying) {
+          this.channelService.play();
+        } else {
+          this.channelService.stop();
+        }
+      });
   }
 
-  ngAfterViewInit(): void {
-    this.setPreviewElementVolume(this.channel.volume);
+  ngOnDestroy(): void {
+    this.channelService.stop();
+    this.playSubscription && this.playSubscription.unsubscribe();
   }
 
   public onBeatClicked(beat: Beat): void {
     beat.on = !beat.on;
-    if (beat.on && this.previewElement.nativeElement.src) {
-      this.previewElement.nativeElement.play().then();
+    if (beat.on && !this.isPlaying) {
+      this.channelService.playOnce(this.channel);
     }
   }
 
-  public onUploadFile(event): void {
+  public async onUploadFile(event): Promise<void> {
     const files: FileList = event.target.files;
     const file = files.item(0);
     const fileURL = URL.createObjectURL(file);
     this.channel.name = file.name;
-    this.previewElement.nativeElement.src = fileURL;
     this.channel.fileURL = fileURL;
-    this.channelSampleChange.emit(this.channel);
-    this.previewElement.nativeElement.play().then();
+    await this.channelService.addAudioBufferDataToChannel(this.channel);
+    !this.isPlaying && this.channelService.playOnce(this.channel);
   }
 
   public onLoadSample() {
@@ -61,26 +72,24 @@ export class ChannelComponent implements OnChanges, AfterViewInit {
 
   public onVolumeChange(event: number): void {
     this.channel.volume = event / 100;
-    this.setPreviewElementVolume(this.channel.volume);
-  }
-
-  private setPreviewElementVolume(volume: number): void {
-    this.previewElement.nativeElement.volume = volume;
   }
 
   public onMute(): void {
-    this.muteChannel.emit(this.channel);
+    this.channelService.muteChannel();
   }
 
   public onSolo(): void {
-    this.soloChannel.emit(this.channel);
+    this.channelService.setChannelSolo();
   }
 
   public onDeleteChannel(): void {
+    if (this.isPlaying) {
+      this.channelService.stop();
+    }
     this.deleteChannel.emit(this.channel);
   }
 
   public onChannelPan(panValue: number): void {
-    this.panChannel.emit(panValue);
+    this.channelService.setChannelPanValue(panValue);
   }
 }
