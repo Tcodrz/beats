@@ -23,6 +23,14 @@ describe('BpmService', () => {
     });
   });
 
+  describe('getNumberOfBars()', () => {
+    it('Should return the numberOfBars', () => {
+      service.setBpm(120, 1);
+      const numberOfBars = service.getNumberOfBars();
+      expect(numberOfBars).toEqual(1);
+    });
+  });
+
   describe('getBpm()', () => {
     beforeEach(() => {
       service.setBpm(120);
@@ -47,9 +55,9 @@ describe('BpmService', () => {
       service.reset();
       expect(stopSpy).toHaveBeenCalled();
     });
-    it('Should reset the counter to 1', () => {
+    it('Should reset the counter to 0', () => {
       service.reset();
-      expect(service['_counter']).toBe(1);
+      expect(service['_counter']).toBe(0);
     });
   });
 });
