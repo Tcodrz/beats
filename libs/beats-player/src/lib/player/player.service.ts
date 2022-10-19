@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from "rxjs";
+import {Observable, ReplaySubject} from "rxjs";
 
 
 @Injectable({
@@ -7,7 +7,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 })
 export class PlayerService {
 
-  private isPlaying$ = new BehaviorSubject<boolean>(false);
+  private isPlaying$ = new ReplaySubject<boolean>(1);
 
   public isPlaying(): Observable<boolean> {
     return this.isPlaying$.asObservable();
