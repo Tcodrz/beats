@@ -20,8 +20,8 @@ describe('PlayerService', () => {
   });
 
   describe('isPlaying()', () => {
-    it('Should return the isPlaying subject with initial value false', () => {
-      expect(isPlaying).toBe(false);
+    it('Should return the isPlaying subject with initial value undefined', () => {
+      expect(isPlaying).toBe(undefined);
     });
   });
 

@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 import {EditorService} from './editor.service';
 import {EditorApiService} from "./editor-api.service";
-import {getEditorApiServiceMock} from "../mocks/editor-api.service.mock";
+import {EditorApiServiceMock, getEditorApiServiceMock} from "../mocks/editor-api.service.mock";
 import {channelsMock} from "./editor-data.mock";
 import {
   BpmService,
@@ -11,10 +11,11 @@ import {
   PlayerService,
   PlayerServiceMock
 } from "@beats/beats-player";
+import {of} from "rxjs";
 
 describe('EditorService', () => {
   let service: EditorService;
-  let editorApiServiceMock: Partial<EditorApiService>;
+  let editorApiServiceMock: EditorApiServiceMock;
   let bpmServiceMock: BpmServiceMock;
   let playerServiceMock: PlayerServiceMock
 
@@ -26,9 +27,9 @@ describe('EditorService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: EditorApiService, useValue: editorApiServiceMock },
-        { provide: BpmService, useValue: bpmServiceMock },
-        { provide: PlayerService, useValue: playerServiceMock }
+        {provide: EditorApiService, useValue: editorApiServiceMock},
+        {provide: BpmService, useValue: bpmServiceMock},
+        {provide: PlayerService, useValue: playerServiceMock}
       ]
     });
     service = TestBed.inject(EditorService);
@@ -36,10 +37,6 @@ describe('EditorService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
-  });
-
-  it('Should subscribe to playerService.isPlaying', () => {
-    expect(playerServiceMock.isPlaying).toHaveBeenCalled();
   });
 
   describe('getChannels()', () => {
@@ -51,6 +48,12 @@ describe('EditorService', () => {
     it('Should init channels$ subject with channels returned from api', () => {
       service.getChannels().subscribe();
       expect(service.getChannelsValue()).toEqual(channelsMock);
+    });
+
+    it('Should return the channels$ observable', () => {
+      service.getChannels().subscribe(channels => {
+        expect(channels).toEqual(channelsMock);
+      });
     });
   });
 
@@ -69,24 +72,42 @@ describe('EditorService', () => {
   });
 
   describe('toggleAllChannelSolo()', () => {
-    it('Should set all channels solo true when called with true value', () =>{
-      service.toggleAllChannelSolo(true);
-      expect(service.getChannelsValue().every(c => c.solo)).toBe(true);
+    it('Should set all channels solo true when isGlobalSoloActive is false', () => {
+      const mockChannels = channelsMock.map(c => ({...c, solo: false}));
+      editorApiServiceMock.getChannels.mockImplementation(() => of(mockChannels));
+      service.toggleAllChannelSolo();
+      service.getChannels().subscribe(channels => {
+        expect(channels.every(c => c.solo)).toBe(true);
+      });
     });
-    it('Should set all channels solo false when called with false value', () =>{
-      service.toggleAllChannelSolo(false);
-      expect(service.getChannelsValue().every(c => c.solo)).toBe(false);
+
+    it('Should set all channels solo false when isGlobalSoloActive is true', () => {
+      const mockChannels = channelsMock.map(c => ({...c, solo: true}));
+      editorApiServiceMock.getChannels.mockImplementation(() => of(mockChannels));
+      service.toggleAllChannelSolo();
+      service.getChannels().subscribe(channels => {
+        expect(channels.every(c => !c.solo)).toBe(true);
+      });
     });
   });
 
   describe('toggleAllChannelMute()', () => {
-    it('Should set all channels mute true when called with true value', () => {
-      service.toggleAllChannelMute(true);
-      expect(service.getChannelsValue().every(c => c.mute)).toBe(true);
+    it('Should set all channels mute true when isGlobalMuteActive is false', () => {
+      const mockChannels = channelsMock.map(c => ({...c, mute: false}));
+      editorApiServiceMock.getChannels.mockImplementation(() => of(mockChannels));
+      service.toggleAllChannelMute();
+      service.getChannels().subscribe(channels => {
+        expect(channels.every(c => c.mute)).toBe(true);
+      });
     });
-    it('Should set all channels mute false when called with false value', () => {
-      service.toggleAllChannelMute(false);
-      expect(service.getChannelsValue().every(c => c.mute)).toBe(false);
+
+    it('Should set all channels mute false when isGlobalMuteActive is true', () => {
+      const mockChannels = channelsMock.map(c => ({...c, mute: true}));
+      editorApiServiceMock.getChannels.mockImplementation(() => of(mockChannels));
+      service.toggleAllChannelMute();
+      service.getChannels().subscribe(channels => {
+        expect(channels.every(c => !c.mute)).toBe(true);
+      });
     });
   });
 
