@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {EditorService} from "./editor.service";
 import {Channel} from "@beats/api-interfaces"
-import {Observable, tap} from "rxjs";
+import {Observable} from "rxjs";
 import {ButtonType, Icons} from "@beats/beats-ui";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
@@ -16,8 +16,8 @@ export class EditorComponent implements OnInit {
   public readonly icons = Icons;
 
   public channels$: Observable<Channel[]>;
-  public isGlobalSoloActive: boolean;
-  public isGlobalMuteActive: boolean;
+  public isGlobalSoloActive$: Observable<boolean>;
+  public isGlobalMuteActive$: Observable<boolean>;
 
   constructor(
     private editorService: EditorService,
@@ -25,13 +25,9 @@ export class EditorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.channels$ = this.editorService.getChannels()
-      .pipe(
-        tap(channels => {
-          this.isGlobalMuteActive = channels.some(c => c.mute);
-          this.isGlobalSoloActive = channels.some(c => c.solo);
-        })
-      );
+    this.channels$ = this.editorService.getChannels();
+    this.isGlobalSoloActive$ = this.editorService.isGlobalSoloActive$();
+    this.isGlobalMuteActive$ = this.editorService.isGlobalMuteActive$();
   }
 
   public onDeleteChannel(channel: Channel): void {
@@ -42,33 +38,15 @@ export class EditorComponent implements OnInit {
     this.editorService.createNewChannel();
   }
 
-  public onChannelSolo(channel: Channel): void {
-    this.editorService.soloChannel(channel);
-  }
-
-  public onChannelMute(channel: Channel): void {
-    this.editorService.muteChannel(channel);
-  }
-
   public toggleGlobalSolo(): void {
-    this.isGlobalSoloActive = !this.isGlobalSoloActive;
-    this.editorService.toggleAllChannelSolo(this.isGlobalSoloActive);
+    this.editorService.toggleAllChannelSolo()
   }
 
   public toggleGlobalMute(): void {
-    this.isGlobalMuteActive = !this.isGlobalMuteActive;
-    this.editorService.toggleAllChannelMute(this.isGlobalMuteActive);
+    this.editorService.toggleAllChannelMute();
   }
 
   public onDropChannel<T>(event: CdkDragDrop<T, Channel>): void {
     moveItemInArray(this.editorService.getChannelsValue(), event.previousIndex, event.currentIndex);
-  }
-
-  public onChannelPan(panValue: number, channel: Channel): void {
-    this.editorService.setChannelPanValue(channel, panValue);
-  }
-
-  public onChannelSampleLoaded(channel: Channel): void {
-    this.editorService.addAudioBufferDataToChannel(channel).then();
   }
 }

@@ -2,13 +2,11 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {EditorComponent} from './editor.component';
 import {EditorService} from "./editor.service";
 import {EditorServiceMock, getEditorServiceMock} from "../mocks/editor-service.mock";
-import {PlayerComponentMock} from "../mocks/player-component.mock";
-import {ChannelComponentMock} from "../mocks/channel-component.mock";
+import {MockComponent} from "ng-mocks";
+import {ToolbarComponent} from "../toolbar/toolbar.component";
+import {ChannelComponent} from "@beats/beats-editor";
+import {PlayerComponent} from "@beats/beats-player";
 import {channelsMock} from "./editor-data.mock";
-import {of} from "rxjs";
-import {ButtonComponentMock, ToggleButtonComponentMock} from "@beats/beats-ui";
-import {Channel} from "@beats/api-interfaces";
-import {ToolbarComponentMock} from "../mocks/toolbar.component.mock";
 
 describe('EditorComponent', () => {
   let component: EditorComponent;
@@ -20,13 +18,11 @@ describe('EditorComponent', () => {
     editorServiceMock = getEditorServiceMock();
 
     await TestBed.configureTestingModule({
-      declarations: [EditorComponent],
-      imports: [
-        ChannelComponentMock,
-        PlayerComponentMock,
-        ToggleButtonComponentMock,
-        ButtonComponentMock,
-        ToolbarComponentMock
+      declarations: [
+        EditorComponent,
+        MockComponent(ToolbarComponent),
+        MockComponent(ChannelComponent),
+        MockComponent(PlayerComponent),
       ],
       providers: [
         {provide: EditorService, useValue: editorServiceMock},
@@ -42,110 +38,45 @@ describe('EditorComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('channels$', () => {
-    it('Should call editorService.getChannels', () => {
-      component.channels$.subscribe();
+  describe('ngOnInit()', () => {
+    it('Should call editoService.getChannels', () => {
       expect(editorServiceMock.getChannels).toHaveBeenCalled();
     });
-    it('Should set isGlobalSoloActive to false when no channels solo', () => {
-      component.channels$.subscribe();
-      expect(component.isGlobalSoloActive).toBe(false);
+    it('Should call editoService.isGlobalSoloActive$', () => {
+      expect(editorServiceMock.isGlobalSoloActive$).toHaveBeenCalled();
     });
-    it('Should set isGlobalMuteActive to false when no channels are muted', () => {
-      component.channels$.subscribe();
-      expect(component.isGlobalMuteActive).toBe(false);
-    });
-    it('Should set isGlobalSoloActive to true when at least on channel is solo', () => {
-      editorServiceMock.getChannels.mockImplementation(() => of([
-        ...channelsMock,
-        {
-          ...channelsMock[0],
-          solo: true
-        },
-      ]));
-      component.ngOnInit();
-      component.channels$.subscribe();
-      expect(component.isGlobalSoloActive).toBe(true);
-    });
-    it('Should set isGlobalMuteActive to true when at least on channel is muted', () => {
-      editorServiceMock.getChannels.mockImplementation(() => of([
-        ...channelsMock,
-        {
-          ...channelsMock[0],
-          mute: true
-        },
-      ]));
-      component.ngOnInit();
-      component.channels$.subscribe();
-      expect(component.isGlobalMuteActive).toBe(true);
+    it('Should call editoService.isGlobalMuteActive$', () => {
+      expect(editorServiceMock.isGlobalMuteActive$).toHaveBeenCalled();
     });
   });
 
   describe('onDeleteChannel()', () => {
-    it('Should call editorService.deleteChannel', () => {
-      component.onDeleteChannel({} as Channel);
-      expect(editorServiceMock.deleteChannel).toHaveBeenCalledWith({});
+    it('Should call editorService.deleteChannel with channel', () => {
+      const channelMock = Object.assign({}, channelsMock[0]);
+      component.onDeleteChannel(channelMock);
+      expect(editorServiceMock.deleteChannel).toHaveBeenCalledWith(channelMock)
     });
   });
 
   describe('onAddChannel()', () => {
-    it('Should call editorService.createNewChannel', () => {
+    it('Should call editorService.createNewChannel()', () => {
       component.onAddChannel({} as Event);
       expect(editorServiceMock.createNewChannel).toHaveBeenCalled();
     });
   });
 
-  describe('onChannelSolo()', () => {
-    it('Should call editorService.soloChannel', () => {
-      component.onChannelSolo({} as Channel);
-      expect(editorServiceMock.soloChannel).toHaveBeenCalled();
-    });
-  });
-
-  describe('onChannelMute()', () => {
-    it('Should call editorService.muteChannel', () => {
-      component.onChannelMute({} as Channel);
-      expect(editorServiceMock.muteChannel).toHaveBeenCalledWith({});
-    });
-  });
-
   describe('toggleGlobalSolo()', () => {
-    beforeEach(() => {
-      component.isGlobalSoloActive = false;
+    it('Should call editorService.toggleAllChannelSolo', () => {
       component.toggleGlobalSolo();
-    });
-    it('Should set isGlobalSoloActive to true when isGlobalSoloActive is false', () => {
-      expect(component.isGlobalSoloActive).toBe(true);
-    });
-    it('Should call editorService.toggleAllChanelSolo with isGlobalSoloActive', () => {
-      expect(editorServiceMock.toggleAllChannelSolo).toHaveBeenCalledWith(true);
+      expect(editorServiceMock.toggleAllChannelSolo).toHaveBeenCalled();
     });
   });
 
   describe('toggleGlobalMute()', () => {
-    beforeEach(() => {
-      component.isGlobalMuteActive = false;
+    it('Should call editorService.toggleAllChannelMute', () => {
       component.toggleGlobalMute();
-    });
-    it('Should set isGlobalMuteActive to true when isGlobalMuteActive is false ', () => {
-      expect(component.isGlobalMuteActive).toBe(true);
-    });
-    it('Should call editorService.toggleAllChannelsMute with isGlobalMuteActive', () => {
-      expect(editorServiceMock.toggleAllChannelMute).toHaveBeenCalledWith(true);
+      expect(editorServiceMock.toggleAllChannelMute).toHaveBeenCalled();
     });
   });
 
-  describe('onChannelPan()', () => {
-    it('Should call editorService.setChannelPanValue with channel and new pan value', () => {
-      component.onChannelPan(10, {id: 1, name: 'mock channel'} as Channel);
-      expect(editorServiceMock.setChannelPanValue).toHaveBeenCalledWith({id: 1, name: 'mock channel'}, 10);
-    });
-  });
-
-  describe('onChannelSampleLoaded()', () => {
-    it('Should call editorService.addAudioBufferDataToChannel with channel', () => {
-      component.onChannelSampleLoaded({id: 1, name: 'mock channel'} as Channel);
-      expect(editorServiceMock.addAudioBufferDataToChannel).toHaveBeenCalledWith({id: 1, name: 'mock channel'});
-    });
-  });
 });

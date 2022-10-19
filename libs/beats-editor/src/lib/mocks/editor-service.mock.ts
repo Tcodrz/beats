@@ -23,6 +23,8 @@ export function getEditorServiceMock(): EditorServiceMock {
     }),
     getBPM: fn(() => of(1)),
     isGlobalSoloActive: fn(() => false),
+    isGlobalSoloActive$: fn(() => of(false)),
+    isGlobalMuteActive$: fn(() => of(false)),
   }
 }
 

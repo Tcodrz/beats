@@ -12,7 +12,7 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test beats --watchAll --verbose",
-    "beats":  "nx run-many --target=serve --projects=\"beats,api\""
+    "beats": "nx run-many --target=serve --projects=\"beats,api\""
   },
   "private": true,
   "dependencies": {
@@ -30,8 +30,10 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nrwl/angular": "14.7.15",
+    "ng-mocks": "^14.3.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.5.0",
+    "ts-mocks": "^3.0.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

@@ -1,8 +1,8 @@
 <div class="wrapper">
 
   <div class="toolbar">
-    <beats-toolbar [soloActive]="isGlobalSoloActive"
-                   [muteActive]="isGlobalMuteActive"
+    <beats-toolbar [soloActive]="isGlobalSoloActive$ | async"
+                   [muteActive]="isGlobalMuteActive$ | async"
                    (addClicked)="onAddChannel($event)"
                    (muteClicked)="toggleGlobalMute()"
                    (soloClicked)="toggleGlobalSolo()">
@@ -16,10 +16,6 @@
     <beats-channel *ngFor="let channel of channels$ | async"
                    [channel]="channel"
                    (deleteChannel)="onDeleteChannel($event)"
-                   (soloChannel)="onChannelSolo($event)"
-                   (muteChannel)="onChannelMute($event)"
-                   (panChannel)="onChannelPan($event, channel)"
-                   (channelSampleChange)="onChannelSampleLoaded($event)"
     ></beats-channel>
   </div>
 
